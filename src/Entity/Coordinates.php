@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CoordinatesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,9 +14,13 @@ class Coordinates
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'coordinates')]
+    #[ORM\ManyToOne(inversedBy: 'coords')]
     #[ORM\JoinColumn(nullable: false)]
     private ?runner $runner = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?run $run = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 8)]
     private ?string $latitude = null;
@@ -26,16 +28,8 @@ class Coordinates
     #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 8)]
     private ?string $longitude = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $coords_date = null;
-
-    #[ORM\ManyToMany(targetEntity: run::class)]
-    private Collection $run;
-
-    public function __construct()
-    {
-        $this->run = new ArrayCollection();
-    }
+    #[ORM\Column]
+    private ?\DateTimeImmutable $coords_date = null;
 
     public function getId(): ?int
     {
@@ -50,6 +44,18 @@ class Coordinates
     public function setRunner(?runner $runner): self
     {
         $this->runner = $runner;
+
+        return $this;
+    }
+
+    public function getRun(): ?run
+    {
+        return $this->run;
+    }
+
+    public function setRun(?run $run): self
+    {
+        $this->run = $run;
 
         return $this;
     }
@@ -78,38 +84,14 @@ class Coordinates
         return $this;
     }
 
-    public function getCoordsDate(): ?\DateTimeInterface
+    public function getCoordsDate(): ?\DateTimeImmutable
     {
         return $this->coords_date;
     }
 
-    public function setCoordsDate(\DateTimeInterface $coords_date): self
+    public function setCoordsDate(\DateTimeImmutable $coords_date): self
     {
         $this->coords_date = $coords_date;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, run>
-     */
-    public function getRun(): Collection
-    {
-        return $this->run;
-    }
-
-    public function addRun(run $run): self
-    {
-        if (!$this->run->contains($run)) {
-            $this->run->add($run);
-        }
-
-        return $this;
-    }
-
-    public function removeRun(run $run): self
-    {
-        $this->run->removeElement($run);
 
         return $this;
     }

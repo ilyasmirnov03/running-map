@@ -33,11 +33,11 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $picture = null;
 
     #[ORM\OneToMany(mappedBy: 'runner', targetEntity: Coordinates::class)]
-    private Collection $coordinates;
+    private Collection $coords;
 
     public function __construct()
     {
-        $this->coordinates = new ArrayCollection();
+        $this->coords = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,27 +125,27 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Coordinates>
      */
-    public function getCoordinates(): Collection
+    public function getCoords(): Collection
     {
-        return $this->coordinates;
+        return $this->coords;
     }
 
-    public function addCoordinate(Coordinates $coordinate): self
+    public function addCoord(Coordinates $coord): self
     {
-        if (!$this->coordinates->contains($coordinate)) {
-            $this->coordinates->add($coordinate);
-            $coordinate->setRunner($this);
+        if (!$this->coords->contains($coord)) {
+            $this->coords->add($coord);
+            $coord->setRunner($this);
         }
 
         return $this;
     }
 
-    public function removeCoordinate(Coordinates $coordinate): self
+    public function removeCoord(Coordinates $coord): self
     {
-        if ($this->coordinates->removeElement($coordinate)) {
+        if ($this->coords->removeElement($coord)) {
             // set the owning side to null (unless already changed)
-            if ($coordinate->getRunner() === $this) {
-                $coordinate->setRunner(null);
+            if ($coord->getRunner() === $this) {
+                $coord->setRunner(null);
             }
         }
 
