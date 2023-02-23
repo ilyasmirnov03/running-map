@@ -63,6 +63,8 @@ class AppFixtures extends Fixture
             ->setMap("map.png")
             ->setRunDate(new \DateTimeImmutable());
 
+        $this->getReference("runner-1")->addRun($run);
+
         $manager->persist($run);
 
         for ($i = 1; $i < self::N_RUNNERS; $i++) {
