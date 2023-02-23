@@ -35,9 +35,13 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'runner', targetEntity: Coordinates::class)]
     private Collection $coords;
 
+    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'runner')]
+    private Collection $runs;
+
     public function __construct()
     {
         $this->coords = new ArrayCollection();
+        $this->runs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +151,33 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
             if ($coord->getRunner() === $this) {
                 $coord->setRunner(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Run>
+     */
+    public function getRuns(): Collection
+    {
+        return $this->runs;
+    }
+
+    public function addRun(Run $run): self
+    {
+        if (!$this->runs->contains($run)) {
+            $this->runs->add($run);
+            $run->addRunner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRun(Run $run): self
+    {
+        if ($this->runs->removeElement($run)) {
+            $run->removeRunner($this);
         }
 
         return $this;

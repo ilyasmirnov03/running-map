@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RunRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,14 @@ class Run
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $run_date = null;
+
+    #[ORM\ManyToMany(targetEntity: runner::class, inversedBy: 'runs')]
+    private Collection $runner;
+
+    public function __construct()
+    {
+        $this->runner = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +85,30 @@ class Run
     public function setRunDate(\DateTimeInterface $run_date): self
     {
         $this->run_date = $run_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, runner>
+     */
+    public function getRunners(): Collection
+    {
+        return $this->runner;
+    }
+
+    public function addRunner(runner $runner): self
+    {
+        if (!$this->runner->contains($runner)) {
+            $this->runner->add($runner);
+        }
+
+        return $this;
+    }
+
+    public function removeRunner(runner $runner): self
+    {
+        $this->runner->removeElement($runner);
 
         return $this;
     }
