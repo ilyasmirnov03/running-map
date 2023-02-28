@@ -1,20 +1,56 @@
-{% extends 'base.html.twig' %}
+{% extends 'map.html.twig' %}
 
-{% block title %}Hello MapController!{% endblock %}
+{% block title %}Map{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div id="map"></div>
+        <script>
+            window.onload = function () {
+                Gp.Services.getConfig({
+                    apiKey: "v89tabvpoy3qyoxbf6nv49hd",
+                    serverUrl: "{{ asset('/vendor/leaflet/autoconf.json') }}",
+                    callbackSuffix : '',
+                    onSuccess: function (response) {
+                        var map = L.map('map').setView([45.64772587855568, 0.13676991313307407], 13),
+                            osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+                        map.addLayer(osm);
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+                        fetch("{{ asset('/map.kml') }}")
+                            .then(res => res.text())
+                            .then(kmltext => {
+                                parser = new DOMParser();
+                                kml = parser.parseFromString(kmltext,"text/xml");
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Maxence/Documents/GitHub/running-map/src/Controller/MapController.php'|file_link(0) }}">src/Controller/MapController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Maxence/Documents/GitHub/running-map/templates/map/index.html.twig'|file_link(0) }}">templates/map/index.html.twig</a></code></li>
-    </ul>
-</div>
+                                {# TODO: TRACK LENGTH => RUN LENGTH #}
+
+                                const track = new L.KML(kml);
+                                {# ! WEIGHT IS NOT ADAPTATIVE #}
+                                track.setStyle({ opacity: 1, weight: 20, color: "#5639b8" });
+                                map.addLayer(track)
+                                console.log(track);
+
+                                const bounds = track.getBounds()
+                                map.fitBounds( bounds )
+                            });
+                            var greenIcon = L.icon({
+                                iconUrl: "{{ asset('/placeholder.png') }}",
+                                iconSize: [38, 38],
+                                iconAnchor: [19, 38],
+                                popupAnchor:  [0, -30]
+                            });
+                            L.marker([45.64772587855568, 0.13676991313307407], {icon: greenIcon}).addTo(map).bindPopup("Coureur : Fred <br> Vitesse coureur : 12km/h", { maxWidth : 150 });
+                    }
+                });
+            }
+        </script>
+    <style>
+        html, body {
+            margin: 0;
+        }
+        #map {
+            height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+        }
+    </style>
 {% endblock %}
