@@ -1,0 +1,27 @@
+
+    <!DOCTYPE html>
+<html>
+        <head>
+        <!-- Library Leaflet -->
+        {# ! WE HOST ! #}
+        {# <link rel="stylesheet" href="leaflet.css" />
+        <script src="leaflet.js"></script> #}
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+        
+        <!-- Extension Géoportail pour Leaflet -->
+        <link rel="stylesheet" href="{{ asset('/vendor/leaflet/GpPluginLeaflet-src.css') }}"/>
+        <script src="{{ asset('/vendor/leaflet/GpPluginLeaflet.js') }}"></script>
+        <script src="{{ asset('/vendor/leaflet/L.KML.js') }}"></script>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+    </body>
+</html>
