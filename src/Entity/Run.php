@@ -34,6 +34,7 @@ class Run
     public function __construct()
     {
         $this->runner = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
