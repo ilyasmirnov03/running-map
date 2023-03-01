@@ -32,10 +32,10 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $picture = null;
 
-    #[ORM\OneToMany(mappedBy: 'runner', targetEntity: Coordinates::class)]
+    #[ORM\OneToMany(mappedBy: 'Runner', targetEntity: Coordinates::class)]
     private Collection $coords;
 
-    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'runner')]
+    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'Runner')]
     private Collection $runs;
 
     public function __construct()

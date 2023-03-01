@@ -28,7 +28,7 @@ class Run
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $run_date = null;
 
-    #[ORM\ManyToMany(targetEntity: runner::class, inversedBy: 'runs')]
+    #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'runs')]
     private Collection $runner;
 
     public function __construct()
@@ -97,7 +97,7 @@ class Run
         return $this->runner;
     }
 
-    public function addRunner(runner $runner): self
+    public function addRunner(Runner $runner): self
     {
         if (!$this->runner->contains($runner)) {
             $this->runner->add($runner);
@@ -106,7 +106,7 @@ class Run
         return $this;
     }
 
-    public function removeRunner(runner $runner): self
+    public function removeRunner(Runner $runner): self
     {
         $this->runner->removeElement($runner);
 
