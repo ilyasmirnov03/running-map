@@ -14,12 +14,12 @@ class Coordinates
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'coords')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'coordinates')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "cascade")]
     private ?runner $runner = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'coordinates')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "cascade")]
     private ?run $run = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 8)]
