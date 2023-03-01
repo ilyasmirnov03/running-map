@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les courses{% endblock %}
+
+{% block body %}
+    <h1>Run index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Map</th>
+                <th>Run_date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for run in runs %}
+            <tr>
+                <td>{{ run.name }}</td>
+                <td>{{ run.map }}</td>
+                <td>{{ run.runDate ? run.runDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_run_edit', {'id': run.id}) }}">edit</a>
+                    {{ include('admin/run/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_index') }}">Revenir</a>
+    <a href="{{ path('app_admin_run_new') }}">Create new</a>
+{% endblock %}

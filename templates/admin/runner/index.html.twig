@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Runner
+{% endblock %}
+
+{% block body %}
+	<h1>Gerer les profils</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Login</th>
+				<th>Picture</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for runner in runners %}
+				<tr>
+					<td>{{ runner.login }}</td>
+					<td>{{ runner.picture }}</td>
+					<td>
+						<div>
+							<a href="{{ path('app_admin_runner_edit', {'id': runner.id}) }}">edit</a>
+							{{ include('admin/runner/_delete_form.html.twig') }}
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	<a href="{{ path('app_admin_index') }}">back to list</a>
+
+
+{% endblock %}
