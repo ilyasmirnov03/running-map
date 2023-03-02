@@ -3,15 +3,19 @@
 namespace App\Controller\admin;
 
 use App\Entity\Run;
-use App\Entity\Runner;
 use App\Form\RunType;
+use App\Entity\Runner;
 use App\Repository\RunRepository;
 use App\Repository\RunnerRepository;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/admin/run')]
 class AdminRunController extends AbstractController
@@ -22,13 +26,15 @@ class AdminRunController extends AbstractController
     **
     */
     #[Route('/new', name: 'app_admin_run_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, RunRepository $runRepository, RunnerRepository $runnerRepository): Response
+    public function new(Request $request, RunRepository $runRepository, RunnerRepository $runnerRepository, SluggerInterface $slugger): Response
     {
         $run = new Run();
         // creating custom form
         $form = $this->createFormBuilder($run)
             ->add('name')
-            ->add('map')
+            ->add('map', FileType::class, [
+                'mapped' => false
+            ])
             ->add('run_date')
             ->add('runner', ChoiceType::class, [
                 'choices' => $runnerRepository->findAll(),
@@ -44,10 +50,28 @@ class AdminRunController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             //saving as many runners as were selected
             foreach ($form->get("runner")->getData() as $runner) {
                 $run->addRunner($runner);
+            }
+            //saving run file to public
+            $mapFile = $form->get('map')->getData();
+            if ($mapFile) {
+                $originalFilename = pathinfo($mapFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $mapFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $mapFile->move(
+                        $this->getParameter('map_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $run->setMap($newFilename);
             }
 
             $runRepository->save($run, true);
@@ -98,6 +122,8 @@ class AdminRunController extends AbstractController
     public function delete(Request $request, Run $run, RunRepository $runRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $run->getId(), $request->request->get('_token'))) {
+            $fileSystem = new Filesystem();
+            $fileSystem->remove($this->getParameter('map_directory') . $run->getMap());
             $runRepository->remove($run, true);
         }
 
