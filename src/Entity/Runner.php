@@ -38,10 +38,14 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'runner')]
     private Collection $runs;
 
+    #[ORM\OneToMany(mappedBy: 'runner_id', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
+    private Collection $runJoinRequests;
+
     public function __construct()
     {
         $this->coords = new ArrayCollection();
         $this->runs = new ArrayCollection();
+        $this->runJoinRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,6 +182,36 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->runs->removeElement($run)) {
             $run->removeRunner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RunJoinRequest>
+     */
+    public function getRunJoinRequests(): Collection
+    {
+        return $this->runJoinRequests;
+    }
+
+    public function addRunJoinRequest(RunJoinRequest $runJoinRequest): self
+    {
+        if (!$this->runJoinRequests->contains($runJoinRequest)) {
+            $this->runJoinRequests->add($runJoinRequest);
+            $runJoinRequest->setRunnerId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRunJoinRequest(RunJoinRequest $runJoinRequest): self
+    {
+        if ($this->runJoinRequests->removeElement($runJoinRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($runJoinRequest->getRunnerId() === $this) {
+                $runJoinRequest->setRunnerId(null);
+            }
         }
 
         return $this;

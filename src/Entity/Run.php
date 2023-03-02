@@ -31,10 +31,14 @@ class Run
     #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'Run', cascade: ["remove"])]
     private Collection $runner;
 
+    #[ORM\OneToMany(mappedBy: 'run_id', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
+    private Collection $runJoinRequests;
+
     public function __construct()
     {
         $this->runner = new ArrayCollection();
         $this->created_at = new \DateTimeImmutable();
+        $this->runJoinRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -110,6 +114,36 @@ class Run
     public function removeRunner(Runner $runner): self
     {
         $this->runner->removeElement($runner);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RunJoinRequest>
+     */
+    public function getRunJoinRequests(): Collection
+    {
+        return $this->runJoinRequests;
+    }
+
+    public function addRunJoinRequest(RunJoinRequest $runJoinRequest): self
+    {
+        if (!$this->runJoinRequests->contains($runJoinRequest)) {
+            $this->runJoinRequests->add($runJoinRequest);
+            $runJoinRequest->setRun($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRunJoinRequest(RunJoinRequest $runJoinRequest): self
+    {
+        if ($this->runJoinRequests->removeElement($runJoinRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($runJoinRequest->getRun() === $this) {
+                $runJoinRequest->setRun(null);
+            }
+        }
 
         return $this;
     }
