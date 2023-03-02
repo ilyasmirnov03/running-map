@@ -4,45 +4,6 @@
 
 {% block body %}
     <div id="map"></div>
-        <script>
-            window.onload = function () {
-                Gp.Services.getConfig({
-                    apiKey: "v89tabvpoy3qyoxbf6nv49hd",
-                    serverUrl: "{{ asset('/vendor/leaflet/autoconf.json') }}",
-                    callbackSuffix : '',
-                    onSuccess: function (response) {
-                        var map = L.map('map').setView([45.64772587855568, 0.13676991313307407], 13),
-                            osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-                        map.addLayer(osm);
-
-                        fetch("{{ asset('/map.kml') }}")
-                            .then(res => res.text())
-                            .then(kmltext => {
-                                parser = new DOMParser();
-                                kml = parser.parseFromString(kmltext,"text/xml");
-
-                                {# TODO: TRACK LENGTH => RUN LENGTH #}
-
-                                const track = new L.KML(kml);
-                                {# ! WEIGHT IS NOT ADAPTATIVE #}
-                                track.setStyle({ opacity: 1, weight: 20, color: "#5639b8" });
-                                map.addLayer(track)
-                                console.log(track);
-
-                                const bounds = track.getBounds()
-                                map.fitBounds( bounds )
-                            });
-                            var greenIcon = L.icon({
-                                iconUrl: "{{ asset('/placeholder.png') }}",
-                                iconSize: [38, 38],
-                                iconAnchor: [19, 38],
-                                popupAnchor:  [0, -30]
-                            });
-                            L.marker([45.64772587855568, 0.13676991313307407], {icon: greenIcon}).addTo(map).bindPopup("Coureur : Fred <br> Vitesse coureur : 12km/h", { maxWidth : 150 });
-                    }
-                });
-            }
-        </script>
     <style>
         html, body {
             margin: 0;
