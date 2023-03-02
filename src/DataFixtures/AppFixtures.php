@@ -7,6 +7,7 @@ use App\Entity\Run;
 use App\Entity\Admin;
 use App\Entity\Runner;
 use App\Entity\Coordinates;
+use App\Entity\RunJoinRequest;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -28,6 +29,7 @@ class AppFixtures extends Fixture
     {
         $this->loadUsers($manager);
         $this->loadRun($manager);
+        $this->loadRequests($manager);
     }
 
     public function loadUsers(ObjectManager $manager)
@@ -56,16 +58,17 @@ class AppFixtures extends Fixture
 
     public function loadRun(ObjectManager $manager)
     {
-        $run = new Run();
-        $run
-            ->setName("Epic Run")
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setMap("map.png")
-            ->setRunDate(new \DateTimeImmutable());
+        for ($i = 0; $i < 2; $i++) {
+            $run = new Run();
+            $run
+                ->setName("Epic run " . $i)
+                ->setCreatedAt(new \DateTimeImmutable())
+                ->setMap("map.png")
+                ->setRunDate(new \DateTimeImmutable());
+            $this->addReference("run-" . $i, $run);
 
-        $this->getReference("runner-1")->addRun($run);
-
-        $manager->persist($run);
+            $manager->persist($run);
+        }
 
         for ($i = 1; $i < self::N_RUNNERS; $i++) {
             $coords = new Coordinates();
@@ -78,6 +81,21 @@ class AppFixtures extends Fixture
 
             $manager->persist($coords);
         }
+        $manager->flush();
+    }
+
+    public function loadRequests(ObjectManager $manager)
+    {
+        for ($i = 0; $i < 2; $i++) {
+            for ($j = 1; $j < self::N_RUNNERS; $j++) {
+                $runRequest = new RunJoinRequest();
+                $runRequest
+                    ->setRun($this->getReference("run-" . $i))
+                    ->setRunner($this->getReference("runner-" . $j));
+                $manager->persist($runRequest);
+            }
+        }
+
         $manager->flush();
     }
 }
