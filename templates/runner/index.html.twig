@@ -1,15 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil - {{user.login}}{% endblock %}
+{% block title %}Profil -
+	{{user.login}}
+{% endblock %}
 
 {% block body %}
 
-<div>
-    {% for run in runs %}
-        <p>{{run.name}}</p>
-        <a href="">participer</a>
-    {% else %}
-        <p>Aucune carte est disponible en ce moment.</p>
-    {% endfor %}
-</div>
+	<div>
+        {% for run in runs %}
+			<p>{{run.name}}</p>
+			{# if requested to join #}
+			{% if run in requests %}
+				<p>demande en cours</p>
+			{# if request accepted #}
+			{% elseif user in run.getRunners %}
+				<p>Participation accepte</p>
+			{# if none above then able to request to participate #}
+			{% else %}
+				<a href="{{path('app_runner_participate', {'id': run.id})}}">participer</a>
+			{% endif %}
+		{% else %}
+			<p>Aucune course est disponible en ce moment.</p>
+		{% endfor %}
+	</div>
 {% endblock %}
