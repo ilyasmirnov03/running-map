@@ -35,10 +35,10 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'Runner', targetEntity: Coordinates::class)]
     private Collection $coords;
 
-    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'runner')]
+    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'Runner')]
     private Collection $runs;
 
-    #[ORM\OneToMany(mappedBy: 'runner_id', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'runner', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
     private Collection $runJoinRequests;
 
     public function __construct()
@@ -81,7 +81,6 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_RUNNER';
 
         return array_unique($roles);
@@ -194,12 +193,12 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->runJoinRequests;
     }
-
+    
     public function addRunJoinRequest(RunJoinRequest $runJoinRequest): self
     {
         if (!$this->runJoinRequests->contains($runJoinRequest)) {
             $this->runJoinRequests->add($runJoinRequest);
-            $runJoinRequest->setRunnerId($this);
+            $runJoinRequest->setRunner($this);
         }
 
         return $this;
@@ -209,8 +208,8 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->runJoinRequests->removeElement($runJoinRequest)) {
             // set the owning side to null (unless already changed)
-            if ($runJoinRequest->getRunnerId() === $this) {
-                $runJoinRequest->setRunnerId(null);
+            if ($runJoinRequest->getRunner() === $this) {
+                $runJoinRequest->setRunner(null);
             }
         }
 

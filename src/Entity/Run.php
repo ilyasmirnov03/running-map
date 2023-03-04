@@ -31,7 +31,7 @@ class Run
     #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'Run', cascade: ["remove"])]
     private Collection $runner;
 
-    #[ORM\OneToMany(mappedBy: 'run_id', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'run', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
     private Collection $runJoinRequests;
 
     public function __construct()
