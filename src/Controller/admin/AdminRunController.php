@@ -6,14 +6,12 @@ use App\Entity\Run;
 use App\Form\RunType;
 use App\Entity\Runner;
 use App\Repository\RunRepository;
-use App\Repository\RunnerRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -26,7 +24,7 @@ class AdminRunController extends AbstractController
     **
     */
     #[Route('/new', name: 'app_admin_run_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, RunRepository $runRepository, RunnerRepository $runnerRepository, SluggerInterface $slugger): Response
+    public function new(Request $request, RunRepository $runRepository,  SluggerInterface $slugger): Response
     {
         $run = new Run();
         // creating custom form
@@ -36,24 +34,11 @@ class AdminRunController extends AbstractController
                 'mapped' => false
             ])
             ->add('run_date')
-            ->add('runner', ChoiceType::class, [
-                'choices' => $runnerRepository->findAll(),
-                'choice_value' => 'id',
-                'choice_label' => function (Runner $runner) {
-                    return $runner->getLogin();
-                },
-                'multiple' => true,
-                'mapped' => false
-            ])
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //saving as many runners as were selected
-            foreach ($form->get("runner")->getData() as $runner) {
-                $run->addRunner($runner);
-            }
             //saving run file to public
             $mapFile = $form->get('map')->getData();
             if ($mapFile) {
