@@ -60,8 +60,7 @@ L.Util.extend(L.KML, {
 	// - returns true if no parent Folders
 	_check_folder: function (e, folder) {
 		e = e.parentNode;
-		while (e && e.tagName !== 'Folder')
-		{
+		while (e && e.tagName !== 'Folder') {
 			e = e.parentNode;
 		}
 		return !e || e === folder;
@@ -70,7 +69,7 @@ L.Util.extend(L.KML, {
 	parseStyles: function (xml, kmlOptions) {
 		var styles = {};
 		var sl = xml.getElementsByTagName('Style');
-		for (var i=0, len=sl.length; i<len; i++) {
+		for (var i = 0, len = sl.length; i < len; i++) {
 			var style = this.parseStyle(sl[i], kmlOptions);
 			if (style) {
 				var styleName = '#' + style.id;
@@ -83,22 +82,21 @@ L.Util.extend(L.KML, {
 	parseStyle: function (xml, kmlOptions) {
 		var style = {}, poptions = {}, ioptions = {}, el, id;
 
-		var attributes = {color: true, width: true, Icon: true, href: true, hotSpot: true};
+		var attributes = { color: true, width: true, Icon: true, href: true, hotSpot: true };
 
-		function _parse (xml) {
+		function _parse(xml) {
 			var options = {};
 			for (var i = 0; i < xml.childNodes.length; i++) {
 				var e = xml.childNodes[i];
 				var key = e.tagName;
 				if (!attributes[key]) { continue; }
-				if (key === 'hotSpot')
-				{
+				if (key === 'hotSpot') {
 					for (var j = 0; j < e.attributes.length; j++) {
 						options[e.attributes[j].name] = e.attributes[j].nodeValue;
 					}
 				} else {
 					var value = (e.childNodes && e.childNodes.length) ? e.childNodes[0].nodeValue : null;
-					if(!value) {
+					if (!value) {
 						continue;
 					}
 					if (key === 'color') {
@@ -129,8 +127,8 @@ L.Util.extend(L.KML, {
 			var iconOptions = {
 				iconUrl: ioptions.href,
 				shadowUrl: null,
-				anchorRef: {x: ioptions.x, y: ioptions.y},
-				anchorType:	{x: ioptions.xunits, y: ioptions.yunits}
+				anchorRef: { x: ioptions.x, y: ioptions.y },
+				anchorType: { x: ioptions.xunits, y: ioptions.yunits }
 			};
 
 			if (typeof kmlOptions === "object" && typeof kmlOptions.iconOptions === "object") {
@@ -160,8 +158,7 @@ L.Util.extend(L.KML, {
 			el = e.getElementsByTagName('styleUrl');
 			if (el && el[0]) { smStyleUrl = el[0].textContent; }
 
-			if (smKey === 'normal')
-			{
+			if (smKey === 'normal') {
 				existingStyles['#' + e.getAttribute('id')] = existingStyles[smStyleUrl];
 			}
 		}
@@ -259,23 +256,24 @@ L.Util.extend(L.KML, {
 		return layer;
 	},
 
-  addPlacePopup: function(place, layer) {
-    var el, i, j, name, descr = '';
-    el = place.getElementsByTagName('name');
-    if (el.length && el[0].childNodes.length) {
-      name = el[0].childNodes[0].nodeValue;
-    }
-    el = place.getElementsByTagName('description');
-    for (i = 0; i < el.length; i++) {
-      for (j = 0; j < el[i].childNodes.length; j++) {
-        descr = descr + el[i].childNodes[j].nodeValue;
-      }
-    }
+	addPlacePopup: function (place, layer) {
+		var el, i, j, name, descr = '';
+		el = place.getElementsByTagName('name');
+		if (el.length && el[0].childNodes.length) {
+			name = el[0].childNodes[0].nodeValue;
+		}
+		el = place.getElementsByTagName('description');
+		for (i = 0; i < el.length; i++) {
+			for (j = 0; j < el[i].childNodes.length; j++) {
+				descr = descr + el[i].childNodes[j].nodeValue;
+			}
+		}
 
-    if (name) {
-      layer.bindPopup('<h2>' + name + '</h2>' + descr, { className: 'kml-popup'});
-    }
-  },
+		// ? I commented this out, binding a popup to a track with default name look awfull..
+		// if (name) {
+		// 	layer.bindPopup('<h2>' + name + '</h2>' + descr, { className: 'kml-popup' });
+		// }
+	},
 
 	parseCoords: function (xml) {
 		var el = xml.getElementsByTagName('coordinates');
@@ -381,8 +379,8 @@ L.Util.extend(L.KML, {
 				latlonbox.getElementsByTagName('east')[0].childNodes[0].nodeValue
 			]
 		);
-		var attributes = {Icon: true, href: true, color: true};
-		function _parse (xml) {
+		var attributes = { Icon: true, href: true, color: true };
+		function _parse(xml) {
 			var options = {}, ioptions = {};
 			for (var i = 0; i < xml.childNodes.length; i++) {
 				var e = xml.childNodes[i];
@@ -407,7 +405,7 @@ L.Util.extend(L.KML, {
 			var rotation = latlonbox.getElementsByTagName('rotation')[0].childNodes[0].nodeValue;
 			options.rotation = parseFloat(rotation);
 		}
-		return new L.RotatedImageOverlay(options.href, bounds, {opacity: options.opacity, angle: options.rotation});
+		return new L.RotatedImageOverlay(options.href, bounds, { opacity: options.opacity, angle: options.rotation });
 	}
 
 });
@@ -422,24 +420,24 @@ L.KMLIcon = L.Icon.extend({
 	},
 	_createImg: function (src, el) {
 		el = el || document.createElement('img');
-		el.onload = this.applyCustomStyles.bind(this,el)
+		el.onload = this.applyCustomStyles.bind(this, el)
 		el.src = src;
 		return el;
 	},
-	applyCustomStyles: function(img) {
+	applyCustomStyles: function (img) {
 		var options = this.options;
 		var width = options.iconSize[0];
 		var height = options.iconSize[1];
 
-		this.options.popupAnchor = [0,(-0.83*height)];
+		this.options.popupAnchor = [0, (-0.83 * height)];
 		if (options.anchorType.x === 'fraction')
 			img.style.marginLeft = (-options.anchorRef.x * width) + 'px';
 		if (options.anchorType.y === 'fraction')
-			img.style.marginTop  = ((-(1 - options.anchorRef.y) * height) + 1) + 'px';
+			img.style.marginTop = ((-(1 - options.anchorRef.y) * height) + 1) + 'px';
 		if (options.anchorType.x === 'pixels')
 			img.style.marginLeft = (-options.anchorRef.x) + 'px';
 		if (options.anchorType.y === 'pixels')
-			img.style.marginTop  = (options.anchorRef.y - height + 1) + 'px';
+			img.style.marginTop = (options.anchorRef.y - height + 1) + 'px';
 	}
 });
 
@@ -464,17 +462,17 @@ L.RotatedImageOverlay = L.ImageOverlay.extend({
 		this._rotate();
 	},
 	_rotate: function () {
-        if (L.DomUtil.TRANSFORM) {
-            // use the CSS transform rule if available
-            this._image.style[L.DomUtil.TRANSFORM] += ' rotate(' + this.options.angle + 'deg)';
-        } else if (L.Browser.ie) {
-            // fallback for IE6, IE7, IE8
-            var rad = this.options.angle * (Math.PI / 180),
-                costheta = Math.cos(rad),
-                sintheta = Math.sin(rad);
-            this._image.style.filter += ' progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' +
-                costheta + ', M12=' + (-sintheta) + ', M21=' + sintheta + ', M22=' + costheta + ')';
-        }
+		if (L.DomUtil.TRANSFORM) {
+			// use the CSS transform rule if available
+			this._image.style[L.DomUtil.TRANSFORM] += ' rotate(' + this.options.angle + 'deg)';
+		} else if (L.Browser.ie) {
+			// fallback for IE6, IE7, IE8
+			var rad = this.options.angle * (Math.PI / 180),
+				costheta = Math.cos(rad),
+				sintheta = Math.sin(rad);
+			this._image.style.filter += ' progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' +
+				costheta + ', M12=' + (-sintheta) + ', M21=' + sintheta + ', M22=' + costheta + ')';
+		}
 	},
 	getBounds: function () {
 		return this._bounds;
