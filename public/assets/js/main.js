@@ -50,7 +50,7 @@ const App = {
         App.tileLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
         App.map.addLayer(App.tileLayer);
     },
-    setView: async (coords = [45.649674, 0.1405531]) => {
+    setView: async (coords = [App.bounds._northEast.lat, App.bounds._northEast.lng]) => {
         App.map.setView(coords, App.MAX_ZOOM);
     },
     loadKMLTrack: async (path = "/assets/map/default.kml") => {
