@@ -103,22 +103,6 @@ class AppFixtures extends Fixture
             $coords[$i] = ["latitude" => trim($temp[0]), "longitude" => trim($temp[1])];
         }
 
-        //calculate distance of the run
-        $distance = 0;
-        for ($i = 0; $i < count($coords) - 1; $i++) {
-            $earthRadius = 6371000;
-            $latFrom = deg2rad($coords[$i]['latitude']);
-            $lonFrom = deg2rad($coords[$i]['longitude']);
-            $latTo = deg2rad($coords[$i + 1]['latitude']);
-            $lonTo = deg2rad($coords[$i + 1]['longitude']);
-
-            $latDelta = $latTo - $latFrom;
-            $lonDelta = $lonTo - $lonFrom;
-
-            $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-            $distance += $angle * $earthRadius;
-        }
-
         //creating coordinates in database
         for ($i = 1; $i < count($coords) - 1; $i++) {
             $c = new Coordinates();
@@ -132,6 +116,8 @@ class AppFixtures extends Fixture
             $manager->persist($c);
             $date = $date->modify('+20 seconds');
         }
+        $this->getReference("run-1")->setFinishedAt($date);
+        $manager->persist($this->getReference("run-1"));
         $manager->flush();
     }
 
