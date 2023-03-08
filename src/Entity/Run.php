@@ -34,6 +34,9 @@ class Run
     #[ORM\OneToMany(mappedBy: 'run', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
     private Collection $runJoinRequests;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $finished_at = null;
+
     public function __construct()
     {
         $this->runner = new ArrayCollection();
@@ -144,6 +147,18 @@ class Run
                 $runJoinRequest->setRun(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFinishedAt(): ?\DateTimeImmutable
+    {
+        return $this->finished_at;
+    }
+
+    public function setFinishedAt(?\DateTimeImmutable $finished_at): self
+    {
+        $this->finished_at = $finished_at;
 
         return $this;
     }
