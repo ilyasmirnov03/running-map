@@ -10,7 +10,7 @@ const Run = {
         await WS.init(Run.id);
         await App.loadKMLTrack(Run.map);
         // TODO: ADMIN setView Global
-        await App.setView([App.bounds._northEast.lat, App.bounds._northEast.lng]);
+        App.map.fitBounds(App.bounds);
     }
 }
 
