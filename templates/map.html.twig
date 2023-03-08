@@ -16,6 +16,7 @@
         <script src="{{ asset('/vendor/leaflet/GpPluginLeaflet.js') }}"></script>
         <script src="{{ asset('/vendor/leaflet/L.KML.js') }}"></script>
         <script src="{{ asset('/assets/js/main.js') }}" defer></script>
+        <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
