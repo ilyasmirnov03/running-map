@@ -3,48 +3,97 @@
 {% block title %}Profil - admin
 {% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/admin.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
+{% endblock %}
+
+
 {% block body %}
-	<h1>Bienvenue sur votre profil Admin !</h1>
 
-	<section>
-		<h2>Profils de coureurs</h2>
+	<header>
+		<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img">
+		<div class="notifications">
+			<i class="fa-solid fa-bell pr-color notifications__icon"></i>
+			<span><p>{{requests|length}}</p></span>
+		</div>
+	</header>
+	<h1><span>Bienvenue</span> sur votre profil <span>Admin</span> !</h1>
+	
+	<section class="gestion">
 		<div>
-			<a href="{{ path('app_admin_runner_new') }}">creer un profil</a>
-			<a href="{{ path('app_admin_runners') }}">Gerer les profils</a>
+			<h2>Espace Profils coureurs</h2>
+			<div>
+				<a href="{{ path('app_admin_runner_new') }}" class="p-button">Créer un profil</a>
+				<a href="{{ path('app_admin_runners') }}"class="p-button">Gérer les profils</a>
+			</div>
+		</div>
+		<div>
+			<h2>Espace des courses</h2>
+			<div>
+				<a href="{{ path('app_admin_run_new') }}" class="p-button">Créer une course</a>
+				<a href="{{ path('app_admin_runs') }}" class="p-button">Gérer les courses</a>
+			</div>
 		</div>
 	</section>
 
-	<section>
-		<h2>Creation des courses</h2>
+	<section class="gest-notif">
+		
 		<div>
-			<a href="{{ path('app_admin_run_new') }}">creer une course</a>
-			<a href="{{ path('app_admin_runs') }}">Gerer les courses</a>
-		</div>
-	</section>
-
-	<section>
-		<h2>Demandes d'inscription aux courses: {{requests|length}}</h2>
-		<div>
+			<span class="close"><i class="fa-sharp fa-solid fa-circle-xmark"></i></span>
+			<h2>Demandes d'inscription aux courses: {{requests|length}}</h2>
 			{% for request in requests %}
-				<div>
-					<p>{{request.getRunner.login}} veut rejoindre <b>{{request.getRun.name}}</b>
-					</p>
+			<div class="notification">
+				<p><b>{{request.getRunner.login}}</b> veut rejoindre <b>{{request.getRun.name}}</b></p>
+				<div class="buttons">
 					<form action="{{ path('app_admin_accept', {'id':request.getRun.id}) }}" method="POST">
 						<input type="hidden" name="runnerId" value="{{request.getRunner.id}}">
 						<input type="hidden" name="request" value="{{request.id}}">
 						<input type="hidden" name="accept" value="{{true}}">
-						<button type="submit">Oui</button>
+						<button type="submit" class="green-button">Oui</button>
 					</form>
 					<form action="{{ path('app_admin_accept', {'id':request.getRun.id}) }}" method="POST">
 						<input type="hidden" name="runnerId" value="{{request.getRunner.id}}">
 						<input type="hidden" name="request" value="{{request.id}}">
 						<input type="hidden" name="accept" value="{{false}}">
-						<button type="submit">Non</button>
+						<button type="submit" class="red-button">Non</button>
 					</form>
 				</div>
+			</div>
 			{% else %}
 				<p>Aucune demande d'inscription en ce moment.</p>
 			{% endfor %}
 		</div>
 	</section>
+	<div class="nav">
+		<ul>
+			<li class="nav__list">
+				<a href="#">
+					<span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
+					<span class="nav__list--text">Courses</span>
+				</a>
+			</li>
+			<li class="nav__list active">
+				<a href="#">
+					<span class="nav__list--icon"><i class="fa-solid fa-house"></i></span>
+					<span class="nav__list--text">Accueil</span>
+				</a>
+			</li>
+			<li class="nav__list">
+				<a href="#">
+					<span class="nav__list--icon"><i class="fa-solid fa-user"></i></span>
+					<span class="nav__list--text">Profil</span>
+				</a>
+			</li>
+			<div class="indicator"></div>
+		</ul>	
+	</div>
+			
+			{% block javascripts %}
+			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
+			<script src="{{ asset("assets/js/navbar.js") }}"></script>
+			<script src="{{ asset("assets/js/close.js") }}"></script>
+       		{% endblock %}
 {% endblock %}

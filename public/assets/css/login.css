@@ -1,0 +1,21 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+.bg-image {
+  background-image: url(./../images/login-background.png);
+  filter: blur(2px);
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+form {
+  z-index: 1;
+}
