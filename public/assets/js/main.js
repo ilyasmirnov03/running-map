@@ -53,8 +53,8 @@ const App = {
     setView: async (coords = [45.649674, 0.1405531]) => {
         App.map.setView(coords, App.MAX_ZOOM);
     },
-    loadKMLTrack: async (path = "/assets/map/default.kml") => {
-        await fetch(path).then(res => res.text()).then(kmltext => {
+    loadKMLTrack: async (path = "default.kml") => {
+        await fetch(`/assets/map/${path}`).then(res => res.text()).then(kmltext => {
             parser = new DOMParser();
             kml = parser.parseFromString(kmltext, "text/xml");
 
