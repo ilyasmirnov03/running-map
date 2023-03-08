@@ -14,4 +14,10 @@
             box-sizing: border-box;
         }
     </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            await Run.init( {{ { 'id': run.id, 'name': run.name, 'created_at': run.createdAt,
+             'map': run.map, 'date': run.runDate }|json_encode()|raw }} );
+        });
+    </script>
 {% endblock %}

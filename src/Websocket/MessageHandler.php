@@ -18,6 +18,13 @@ class MessageHandler implements MessageComponentInterface
     public function onOpen(ConnectionInterface $conn)
     {
         $this->connections->attach($conn);
+        foreach($this->connections as $connection)
+        {
+            if($connection === $conn)
+            {
+                $connection->send("Connected: from ws");
+            }
+        }
     }
 
     // !

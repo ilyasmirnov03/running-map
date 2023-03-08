@@ -1,22 +1,36 @@
 window.addEventListener('DOMContentLoaded', async () => {
-    await WS.init();
     await App.init();
 });
 
+const Run = {
+    init: async (...run) => {
+        Object.entries(run[0]).forEach((k) => {
+            Run[k[0]] = k[1];
+        });
+        await WS.init(Run.id);
+        await App.loadKMLTrack(Run.map);
+        // TODO: ADMIN setView Global
+        await App.setView([App.bounds._northEast.lat, App.bounds._northEast.lng]);
+    }
+}
+
 const WS = {
-    init: async (port = 3001) => {
-        const socket = new WebSocket(`ws://localhost:${port}`);
-        socket.addEventListener("open", WS.onOpen);
-        socket.addEventListener("message", WS.onMessage);
+    init: async (run_id, port = 3001) => {
+        WS.server = new WebSocket(`ws://localhost:${port}/${run_id}`);
+        WS.server.addEventListener("open", WS.onOpen);
+        WS.server.addEventListener("message", WS.onMessage);
     },
     onOpen: (e) => {
-        console.log("WS Opened");
+        // console.log(e);
+        // WS.send({ name: "Test", message: "Hello World" });
     },
-    onMessage: (e) => {
+    onMessage: async (e) => {
         console.log(e.data);
+        // await App.loadMarkers([]); // ! PLUG RUNNERS FROM TABLE
     },
     send: (message) => {
-        socket.send(JSON.stringify(message));
+        // console.log(message);
+        WS.server.send(JSON.stringify(message));
     }
 }
 
@@ -35,10 +49,6 @@ const App = {
         });
         App.tileLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
         App.map.addLayer(App.tileLayer);
-        await App.loadKMLTrack();
-        // TODO: ADMIN setView Global
-        await App.setView([App.bounds._northEast.lat, App.bounds._northEast.lng]);
-        await App.loadMarkers([]); // ! PLUG RUNNERS FROM TABLE
     },
     setView: async (coords = [45.649674, 0.1405531]) => {
         App.map.setView(coords, App.MAX_ZOOM);
