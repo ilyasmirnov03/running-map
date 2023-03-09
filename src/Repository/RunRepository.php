@@ -39,6 +39,16 @@ class RunRepository extends ServiceEntityRepository
         }
     }
 
+    public function findLatest()
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.finished_at is null')
+            ->orderBy('d.run_date', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Run[] Returns an array of Run objects
 //     */
