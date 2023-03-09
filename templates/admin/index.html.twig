@@ -37,8 +37,13 @@
 				<a href="{{ path('app_admin_runs') }}" class="p-button">Gérer les courses</a>
 			</div>
 		</div>
+		{% if app.user %}
+        <div class="logout">
+            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Me déconnecter</a>
+        </div>
+    {% endif %}
 	</section>
-
+	
 	<section class="gest-notif">
 		
 		<div>
