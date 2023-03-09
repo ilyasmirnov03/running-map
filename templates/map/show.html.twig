@@ -24,18 +24,25 @@
     </div>
 
     <script>
+        const GetRunnersInfo = async (timestamp) => {
+            const f = await fetch(`/coords/{{ run.id }}/${timestamp}`);
+            const c = await f.json();
+            return c;
+        }
         window.addEventListener('DOMContentLoaded', async () => {
             //run data
             await Run.init( {{ { 'id': run.id, 'name': run.name, 'created_at': run.createdAt,'map': run.map, 'date': run.runDate }|json_encode()|raw }} );
+            await App.loadMarkers(await GetRunnersInfo({{run.runDate|date('U')}}));
             //run progress showcase with range slider
             let timer;
-            document.querySelector('.time-choice').addEventListener('input', function()  {
+            let timestamp_input = document.querySelector('.time-choice');
+            if(!timestamp_input) return;
+            timestamp_input.value = 0;
+            timestamp_input.addEventListener('input', function()  {
                 clearTimeout(timer);
                 //fetch only half a second after selecting
-                timer = setTimeout(() => {
-                    fetch(`/coords/{{ run.id }}/${this.value}`)
-                        .then((res) =>  res.json())
-                        .then((data) => console.log(data));
+                timer = setTimeout( async () => {
+                    await App.updateMarkers(await GetRunnersInfo(this.value));
                 }, 500);
             });
         });
