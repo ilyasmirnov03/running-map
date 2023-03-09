@@ -83,7 +83,7 @@ class AppFixtures extends Fixture
                 ->setName("Epic run " . $i)
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setMap("default.kml")
-                ->setRunDate($date)
+                ->setRunDate($date->modify("+1 day"))
                 ->addRunner($this->getReference('runner-1'));
             $this->addReference("run-" . $i, $run);
 
@@ -100,7 +100,7 @@ class AppFixtures extends Fixture
         $coords = array_merge(...$coords);
         foreach ($coords as $i => $coord) {
             $temp = explode(",", $coord);
-            $coords[$i] = ["latitude" => trim($temp[0]), "longitude" => trim($temp[1])];
+            $coords[$i] = ["latitude" => trim($temp[1]), "longitude" => trim($temp[0])];
         }
 
         //creating coordinates in database
