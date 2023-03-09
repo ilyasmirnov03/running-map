@@ -80,9 +80,9 @@ const App = {
                 iconSize: [App.MARKER_BOX_SIZE, App.MARKER_BOX_SIZE],
                 iconAnchor: [App.MARKER_BOX_SIZE/2, App.MARKER_BOX_SIZE],
                 popupAnchor: [0, -App.MARKER_BOX_SIZE - 8],
-                shadowUrl: "/assets/users/shadow.png",
-                shadowSize:   [App.MARKER_BOX_SIZE * 2 - 12, App.MARKER_BOX_SIZE * 2 - 12],
-                shadowAnchor: [App.MARKER_BOX_SIZE - 6, App.MARKER_BOX_SIZE + 4],
+                // shadowUrl: "/assets/users/shadow.png",
+                // shadowSize:   [App.MARKER_BOX_SIZE * 2 - 12, App.MARKER_BOX_SIZE * 2 - 12],
+                // shadowAnchor: [App.MARKER_BOX_SIZE - 6, App.MARKER_BOX_SIZE + 4],
                 className: "runner-marker"
             });
             this.addMarker(runner.coords);
