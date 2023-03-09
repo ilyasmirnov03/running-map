@@ -10,7 +10,7 @@ const Run = {
         await WS.init(Run.id);
         await App.loadKMLTrack(Run.map);
         // TODO: ADMIN setView Global
-        await App.setView([App.bounds._northEast.lat, App.bounds._northEast.lng]);
+        App.map.fitBounds(App.bounds);
     }
 }
 
@@ -53,8 +53,8 @@ const App = {
     setView: async (coords = [App.bounds._northEast.lat, App.bounds._northEast.lng]) => {
         App.map.setView(coords, App.MAX_ZOOM);
     },
-    loadKMLTrack: async (path = "/assets/map/default.kml") => {
-        await fetch(path).then(res => res.text()).then(kmltext => {
+    loadKMLTrack: async (path = "default.kml") => {
+        await fetch(`/assets/map/${path}`).then(res => res.text()).then(kmltext => {
             parser = new DOMParser();
             kml = parser.parseFromString(kmltext, "text/xml");
 

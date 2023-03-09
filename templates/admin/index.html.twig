@@ -1,23 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil - admin{% endblock %}
+{% block title %}Profil - admin
+{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur votre profil Admin !</h1>
+	<h1>Bienvenue sur votre profil Admin !</h1>
 
-    <section>
-        <h2>Profils de coureurs</h2>
-        <div>
-            <a href="{{ path('app_admin_runner_new') }}">creer un profil</a>
-            <a href="{{ path('app_admin_runners') }}">Gerer les profils</a>
-        </div>
-    </section>
+	<section>
+		<h2>Profils de coureurs</h2>
+		<div>
+			<a href="{{ path('app_admin_runner_new') }}">creer un profil</a>
+			<a href="{{ path('app_admin_runners') }}">Gerer les profils</a>
+		</div>
+	</section>
 
-    <section>
-        <h2>Creation des courses</h2>
-        <div>
-            <a href="{{ path('app_admin_run_new') }}">creer une course</a>
-            <a href="{{ path('app_admin_runs') }}">Gerer les courses</a>
-        </div>
-    </section>
+	<section>
+		<h2>Creation des courses</h2>
+		<div>
+			<a href="{{ path('app_admin_run_new') }}">creer une course</a>
+			<a href="{{ path('app_admin_runs') }}">Gerer les courses</a>
+		</div>
+	</section>
+
+	<section>
+		<h2>Demandes d'inscription aux courses: {{requests|length}}</h2>
+		<div>
+			{% for request in requests %}
+				<div>
+					<p>{{request.getRunner.login}} veut rejoindre <b>{{request.getRun.name}}</b>
+					</p>
+					<form action="{{ path('app_admin_accept', {'id':request.getRun.id}) }}" method="POST">
+						<input type="hidden" name="runnerId" value="{{request.getRunner.id}}">
+						<input type="hidden" name="request" value="{{request.id}}">
+						<input type="hidden" name="accept" value="{{true}}">
+						<button type="submit">Oui</button>
+					</form>
+					<form action="{{ path('app_admin_accept', {'id':request.getRun.id}) }}" method="POST">
+						<input type="hidden" name="runnerId" value="{{request.getRunner.id}}">
+						<input type="hidden" name="request" value="{{request.id}}">
+						<input type="hidden" name="accept" value="{{false}}">
+						<button type="submit">Non</button>
+					</form>
+				</div>
+			{% else %}
+				<p>Aucune demande d'inscription en ce moment.</p>
+			{% endfor %}
+		</div>
+	</section>
 {% endblock %}

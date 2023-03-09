@@ -35,13 +35,17 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'Runner', targetEntity: Coordinates::class)]
     private Collection $coords;
 
-    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'runner')]
+    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'Runner')]
     private Collection $runs;
+
+    #[ORM\OneToMany(mappedBy: 'runner', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
+    private Collection $runJoinRequests;
 
     public function __construct()
     {
         $this->coords = new ArrayCollection();
         $this->runs = new ArrayCollection();
+        $this->runJoinRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,7 +81,6 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_RUNNER';
 
         return array_unique($roles);
@@ -178,6 +181,36 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->runs->removeElement($run)) {
             $run->removeRunner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RunJoinRequest>
+     */
+    public function getRunJoinRequests(): Collection
+    {
+        return $this->runJoinRequests;
+    }
+    
+    public function addRunJoinRequest(RunJoinRequest $runJoinRequest): self
+    {
+        if (!$this->runJoinRequests->contains($runJoinRequest)) {
+            $this->runJoinRequests->add($runJoinRequest);
+            $runJoinRequest->setRunner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRunJoinRequest(RunJoinRequest $runJoinRequest): self
+    {
+        if ($this->runJoinRequests->removeElement($runJoinRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($runJoinRequest->getRunner() === $this) {
+                $runJoinRequest->setRunner(null);
+            }
         }
 
         return $this;
