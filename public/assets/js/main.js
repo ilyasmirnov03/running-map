@@ -90,7 +90,7 @@ const App = {
         }
         addMarker(coords) {
             this.markerObject = L.marker([coords.latitude, coords.longitude], { icon: this.marker }).addTo(App.map);
-            console.log(this.markerObject);
+            // console.log(this.markerObject);
         }
         getMarker() {
             return this.marker;
