@@ -4,20 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Run;
 use App\Repository\CoordinatesRepository;
+use App\Repository\RunRepository;
 use App\Service\ToolboxService;
-use LDAP\Result;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MapController extends AbstractController
 {
-    // TODO: Redirect to most recent run
     #[Route('/', name: 'app_map_index')]
-    public function index(): Response
+    public function index(RunRepository $runRepository): Response
     {
         return $this->render('map/index.html.twig', [
-            'controller_name' => 'MapController',
+            'run' =>  $runRepository->findLatest()[0]
         ]);
     }
 
