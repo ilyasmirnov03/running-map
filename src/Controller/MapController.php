@@ -20,7 +20,7 @@ class MapController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_map_id')]
+    #[Route('/map/{id}', name: 'app_map_id')]
     public function run(Run $run): Response
     {
         return $this->render('map/show.html.twig', [

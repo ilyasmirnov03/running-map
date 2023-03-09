@@ -50,7 +50,7 @@ const App = {
         App.tileLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
         App.map.addLayer(App.tileLayer);
     },
-    setView: async (coords = [45.649674, 0.1405531]) => {
+    setView: async (coords = [App.bounds._northEast.lat, App.bounds._northEast.lng]) => {
         App.map.setView(coords, App.MAX_ZOOM);
     },
     loadKMLTrack: async (path = "default.kml") => {
@@ -70,7 +70,7 @@ const App = {
     },
     updateMarkers: async (runners) => {
         runners.forEach(runner => {
-            App.UserMarkerManager.MarkerCollection[runner.id].update(runner);
+            App.UserMarkerManager.MarkerCollection[runner.runner].update(runner);
         });
     },
     UserMarker: class {
@@ -89,21 +89,22 @@ const App = {
             this.setPopup(runner);
         }
         addMarker(coords) {
-            this.markerObject = L.marker(coords, { icon: this.marker }).addTo(App.map);
+            this.markerObject = L.marker([coords.latitude, coords.longitude], { icon: this.marker }).addTo(App.map);
+            console.log(this.markerObject);
         }
         getMarker() {
             return this.marker;
         }
         setPos(coords) {
-            if(this.pos) {
-                this.speed = this.pos // TODO CALC WITH "coords"
-            }
+            // if(this.pos) {
+            //     this.speed = this.pos // TODO CALC WITH "coords"
+            // }
             this.pos = coords;
-            this.marker?.setLatLng(coords);
+            this.markerObject?.setLatLng([coords.latitude, coords.longitude]);
         }
         setPopup(runner) {
             // TODO: USER SPEED
-            this.markerObject.bindPopup(`Coureur : ${runner.login} <br> Vitesse coureur : ${runner.speed}km/h`, { width: 120 });
+            this.markerObject.bindPopup(`Coureur : ${runner.login ?? "Franck"} <br> Vitesse coureur : ${this.speed ?? 0}km/h`, { width: 120 });
         }
         update (runner) {
             this.setPos(runner.coords);
@@ -115,7 +116,7 @@ const App = {
         constructor (runners) {
             runners.forEach(runner => {
                 const Marker = new App.UserMarker(runner);
-                App.UserMarkerManager.MarkerCollection[runner.id] = Marker;
+                App.UserMarkerManager.MarkerCollection[runner.runner] = Marker;
             });
         }
     }
