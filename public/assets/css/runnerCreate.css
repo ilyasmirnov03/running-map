@@ -21,7 +21,7 @@ body {
   margin-top: 75px;
 }
 
-.form {
+form {
   position: relative;
   z-index: 10;
   height: 100vh;
@@ -30,7 +30,7 @@ body {
   justify-content: center;
   align-items: center;
 }
-.form__connexion {
+.form__create {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,7 +40,7 @@ body {
   margin-bottom: 70px;
 }
 
-.form__connexion h1 {
+.form__create h1 {
   font-size: 28px;
   margin-bottom: 16px;
   text-align: center;
@@ -70,7 +70,7 @@ body {
   font-size: 18px;
 }
 
-.btn-connexion {
+.btn-create {
   width: 150px;
   height: 30px;
   background: #eef6fe;
@@ -81,7 +81,7 @@ body {
   cursor: pointer;
   transition: 0.2s;
 }
-.btn-connexion:hover {
+.btn-create:hover {
   transform: translateY(-3px);
   box-shadow: 0rem 5px 10px rgba(255, 255, 255, 0.5);
 }
@@ -93,4 +93,12 @@ body {
 }
 .logout a {
   color: white;
+}
+
+.retour {
+  position: absolute;
+  bottom: 100px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
 }
