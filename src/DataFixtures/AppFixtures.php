@@ -22,9 +22,8 @@ class AppFixtures extends Fixture
 
     const N_RUNNERS = 10;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher, ParameterBagInterface $params, ToolboxService $toolboxService)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, ToolboxService $toolboxService)
     {
-        $this->params = $params;
         $this->passwordHasher = $passwordHasher;
         $this->toolboxService = $toolboxService;
         $this->faker = Factory::create("fr_FR");
@@ -53,7 +52,7 @@ class AppFixtures extends Fixture
                 ->setLogin($this->faker->userName())
                 ->setPassword($this->passwordHasher->hashPassword($runner, '1234'))
                 ->setRoles(['ROLE_RUNNER'])
-                ->setPicture("image.png");
+                ->setPicture("default.png");
             $this->addReference("runner-" . $i, $runner);
             $manager->persist($runner);
         }
