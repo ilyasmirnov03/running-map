@@ -5,7 +5,5 @@
 {% block body %}
     <h1>Create new Run</h1>
 
-    {{ include('admin/_form.html.twig') }}
-
-    <a href="{{ path('app_admin_index') }}">back to list</a>
+    {{ include('admin/_form.html.twig', {'h1_label': 'Créer une nouvelle course'}) }}
 {% endblock %}

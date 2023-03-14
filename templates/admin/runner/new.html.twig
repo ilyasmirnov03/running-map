@@ -1,31 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
-<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
-<link rel="stylesheet" href="{{ asset("assets/css/runnerCreate.css") }}">
-{% endblock %}
-
 {% block title %}New Runner{% endblock %}
 
 {% block body %}
-    
-    {{ form_start(form) }}
-    <img src="{{ asset("assets/images/logo-complet.png") }}" alt="" class="logo">
-        <div class="form__create">
-            <h1>Créer le profil d'un coureur</h1>
-            <div class="inputs">
-                <label for="">{{ form_label(form.login)}} :</label>
-                {{ form_widget(form.login)}}
-            </div>
-            <div class="inputs">
-                <label for="">{{ form_label(form.password)}} :</label>
-                {{ form_widget(form.password)}}
-            </div>
-            <button class="btn-create">{{ button_label|default('Créer') }}</button>
-            <a href="{{ path('app_admin_index') }}" class="retour">Retourner à l'accueil</a>
-        </div>
-    {{ form_end(form) }}
-    {# {{ include('admin/_form.html.twig') }} #}
-    <img src="{{ asset("assets/images/createLogin-background.png") }}" alt="" class="bg-img">
+    {{ include('admin/_form.html.twig', {'h1_label': 'Créer le profil d\'un coureur'}) }}
 {% endblock %}
