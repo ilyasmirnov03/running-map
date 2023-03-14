@@ -48,7 +48,7 @@ class ToolboxService
         $lines = ((array) $mapXML->Document)["Placemark"];
         $coords = array();
         foreach ($lines as $coord) {
-            array_push($coords, explode("\n", trim(strval($coord->LineString->coordinates))));
+            array_push($coords, explode("\n", trim(strval((isset($coord->LineString)) ? $coord->LineString->coordinates : $coord->Point->coordinates))));
         }
         $coords = array_merge(...$coords);
         foreach ($coords as $i => $coord) {

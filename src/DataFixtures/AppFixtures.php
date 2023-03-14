@@ -9,9 +9,9 @@ use App\Entity\Runner;
 use App\Entity\Coordinates;
 use App\Entity\RunJoinRequest;
 use App\Service\ToolboxService;
+use DateTimeImmutable;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
         $this->loadUsers($manager);
         $this->loadRun($manager, $this->toolboxService);
         $this->loadRequests($manager);
+        $this->loadLiveRuns($manager);
     }
 
     /**
@@ -91,7 +92,7 @@ class AppFixtures extends Fixture
             $manager->persist($run);
         }
         $this->getReference("run-0")->setRunDate($date->modify("+2 days"));
-        $manager->persist( $this->getReference("run-0"));
+        $manager->persist($this->getReference("run-0"));
 
         //loading coordinates from map
         $coords = $toolboxService->getCoordinates("default.kml");
@@ -132,6 +133,61 @@ class AppFixtures extends Fixture
             }
         }
 
+        $manager->flush();
+    }
+
+    /**
+     * Loading demo live runs with runners
+     *
+     * @param ObjectManager $manager
+     * @return void
+     */
+    public function loadLiveRuns(ObjectManager $manager)
+    {
+        $date = new \DateTimeImmutable();
+        $date->modify("+1 minute");
+
+        //generating runs
+        for ($i = 1; $i < 3; $i++) {
+            $run = new Run();
+            $run->setMap("map-" . $i . ".kml")
+                ->setName("run-" . $i)
+                ->setRunDate($date);
+            //associating runners to a run
+            for ($j = 1; $j < self::N_RUNNERS; $j++) {
+                $run->addRunner($this->getReference('runner-' . $j));
+            }
+            $this->addReference('run-live-' . $i, $run);
+            $manager->persist($run);
+            $date->modify("+1 day");
+        }
+
+        //generating coordinates
+        /* 
+        $i = run
+        $j = runner
+        $k = coords
+        */
+        for ($i = 1; $i < 3; $i++) {
+            $mapCoordinates = $this->toolboxService->getCoordinates("map-" . $i . ".kml");
+            $coordsDate = new \DateTimeImmutable();
+            $coordsDate->modify("+1 minute");
+            for ($j = 1; $j < self::N_RUNNERS; $j++) {
+                $speed = random_int(5, 30);
+                for ($k = 1; $k < count($mapCoordinates); $k++) {
+                    $coords = new Coordinates();
+                    $coords
+                    ->setRun($this->getReference('run-live-' . $i))
+                    ->setCoordsDate($coordsDate->modify('+' . $speed . ' seconds'))
+                    ->setLatitude($mapCoordinates[$k]['latitude'])
+                    ->setLongitude($mapCoordinates[$k]['longitude'])
+                    ->setRunner($this->getReference("runner-" . $j));
+                    $manager->persist($coords);
+                    $coordsDate = $coordsDate->modify('+' . $speed . ' seconds');
+                }
+                $coordsDate->modify("+1 day");
+            }
+        }
         $manager->flush();
     }
 }
