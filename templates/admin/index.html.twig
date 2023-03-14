@@ -14,7 +14,7 @@
 {% block body %}
 	
 	<header>
-		<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img">
+		<a href="{{ path('app_login') }}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img"></a>
 		<div class="notifications">
 			<i class="fa-solid fa-bell pr-color notifications__icon"></i>
 			<span><p>{{requests|length}}</p></span>

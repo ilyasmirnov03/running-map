@@ -37,7 +37,8 @@ h1 {
   background-color: #3a859a;
   text-decoration: none;
 }
-.adminHeader a img {
+
+.adminHeader img {
   width: 40px;
   height: auto;
 }
