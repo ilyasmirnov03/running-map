@@ -15,6 +15,33 @@ user-marker */
 
 /* THIS IS USER TARGET MARKER */
 .leaflet-marker-icon.runner-marker {
-    box-shadow: 0px 0px 26px #3f3f3f62;
-    transition: .51s cubic-bezier(.32,.07,.09,.85);
+    transition: .51s cubic-bezier(.32, .07, .09, .85);
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+    color: #ff0f0f;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    color: #ff5757;
+}
+
+.leaflet-popup-content-wrapper {
+    color: #1a1a1a;
+    border-radius: 0 0 15px 0;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background-color: #f2f2f2;
+    box-shadow: none;
+}
+.leaflet-popup-tip {
+    border-radius: 0 0 3px 0;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 0px;
+    box-shadow: 0px 0px 26px #1e1e1e82;
 }
