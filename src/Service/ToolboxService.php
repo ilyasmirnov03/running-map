@@ -2,8 +2,17 @@
 
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
 class ToolboxService
 {
+    private $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
+
     public function find_closest(array $array, $date): array
     {
         foreach ($array as $coord) {
@@ -31,5 +40,21 @@ class ToolboxService
             $distance += $angle * $earthRadius;
         }
         return $distance;
+    }
+
+    public function getCoordinates(string $mapFile)
+    {
+        $mapXML = \simplexml_load_file($this->params->get('map_directory') . "/" . $mapFile);
+        $lines = ((array) $mapXML->Document)["Placemark"];
+        $coords = array();
+        foreach ($lines as $coord) {
+            array_push($coords, explode("\n", trim(strval($coord->LineString->coordinates))));
+        }
+        $coords = array_merge(...$coords);
+        foreach ($coords as $i => $coord) {
+            $temp = explode(",", $coord);
+            $coords[$i] = ["latitude" => trim($temp[1]), "longitude" => trim($temp[0])];
+        }
+        return $coords;
     }
 }

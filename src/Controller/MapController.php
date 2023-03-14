@@ -39,7 +39,7 @@ class MapController extends AbstractController
             foreach ($coordinatesRepository->findBy(["run" => $run, "runner" => $runner]) as $coord) {
                 array_push($coords, ["latitude" => $coord->getLatitude(), "longitude" => $coord->getLongitude(), "date" => $coord->getCoordsDate()->format('U')]);
             }
-            array_push($runners, ["runner" => $runner->getId(), "coords" => $toolboxService->find_closest($coords, $timestamp)]);
+            array_push($runners, ["runner" => ["login" => $runner->getLogin(), "picture" => $runner->getPicture()],  "coords" => $toolboxService->find_closest($coords, $timestamp)]);
         }
         $response->setContent(json_encode($runners));
         return $response;
