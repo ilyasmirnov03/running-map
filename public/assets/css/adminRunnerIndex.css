@@ -15,6 +15,7 @@ h1 {
   text-align: center;
   color: #3a859a;
 }
+
 .adminHeader {
   margin-top: 30px;
   width: 80vw;
@@ -23,10 +24,18 @@ h1 {
   align-items: center;
 }
 .adminHeader a {
-  text-decoration: none;
   color: #3a859a;
   font-size: 20px;
   font-weight: bold;
+  transition: 0.2s;
+  transition-property: background-color, color;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+.adminHeader a:hover {
+  color: white;
+  background-color: #3a859a;
+  text-decoration: none;
 }
 .adminHeader a img {
   width: 40px;
@@ -80,7 +89,7 @@ td {
   text-align: center;
 }
 
-@media (max-width: 420px) {
+@media (max-width: 500px) {
   .actions {
     display: flex;
     flex-direction: column;
