@@ -11,7 +11,7 @@
      
     class WebsocketServerCommand extends Command
     {
-        protected static $defaultName = "run:websocket-server";
+        protected static $defaultName = "run:ws";
         protected function execute(InputInterface $input, OutputInterface $output)
         {
             $port = 3001;

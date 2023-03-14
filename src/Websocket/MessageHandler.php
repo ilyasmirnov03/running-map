@@ -30,7 +30,7 @@ class MessageHandler implements MessageComponentInterface
         $data = json_decode(trim($m));
         switch($data->function ?? "") {
             case "connect": $this->connectToRun($data, $from); break;
-            case "coords": $this->updateCoords($data, $from); break;
+            case "update": $this->updateCoords($data, $from); break;
         }
     }
 
@@ -42,7 +42,7 @@ class MessageHandler implements MessageComponentInterface
                         $conn->send(json_encode(array(
                             "run_id" => $data->run_id,
                             "runner" => $data->runner_id,
-                            "coords" => $data->coords ?? []
+                            "coords" => $data->coords
                         )));
                     }
                 }
