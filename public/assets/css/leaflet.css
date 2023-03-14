@@ -15,7 +15,6 @@ user-marker */
 
 /* THIS IS USER TARGET MARKER */
 .leaflet-marker-icon.runner-marker {
-    box-shadow: 0px 0px 26px #1e1e1ed3;
     transition: .51s cubic-bezier(.32, .07, .09, .85);
 }
 
@@ -44,4 +43,5 @@ user-marker */
 
 .leaflet-popup-content-wrapper {
     border-radius: 0px;
+    box-shadow: 0px 0px 26px #1e1e1e82;
 }
