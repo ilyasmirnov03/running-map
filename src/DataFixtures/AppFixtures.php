@@ -145,7 +145,7 @@ class AppFixtures extends Fixture
     public function loadLiveRuns(ObjectManager $manager)
     {
         $date = new \DateTimeImmutable();
-        $date->modify("+1 minute");
+        $date = $date->modify("+1 minute");
 
         //generating runs
         for ($i = 1; $i < 3; $i++) {
@@ -159,7 +159,7 @@ class AppFixtures extends Fixture
             }
             $this->addReference('run-live-' . $i, $run);
             $manager->persist($run);
-            $date->modify("+1 day");
+            $date = $date->modify("+1 day");
         }
 
         //generating coordinates
@@ -171,19 +171,20 @@ class AppFixtures extends Fixture
         for ($i = 1; $i < 3; $i++) {
             $mapCoordinates = $this->toolboxService->getCoordinates("map-" . $i . ".kml");
             $coordsDate = new \DateTimeImmutable();
-            $coordsDate->modify("+1 minute");
+            $coordsDate = $coordsDate->modify("+1 minute");
             for ($j = 1; $j < self::N_RUNNERS; $j++) {
                 $speed = random_int(5, 30);
+                $coordsDateRunner = $coordsDate;
                 for ($k = 1; $k < count($mapCoordinates); $k++) {
                     $coords = new Coordinates();
                     $coords
-                    ->setRun($this->getReference('run-live-' . $i))
-                    ->setCoordsDate($coordsDate->modify('+' . $speed . ' seconds'))
-                    ->setLatitude($mapCoordinates[$k]['latitude'])
-                    ->setLongitude($mapCoordinates[$k]['longitude'])
-                    ->setRunner($this->getReference("runner-" . $j));
+                        ->setRun($this->getReference('run-live-' . $i))
+                        ->setCoordsDate($coordsDateRunner->modify('+' . $speed . ' seconds'))
+                        ->setLatitude($mapCoordinates[$k]['latitude'])
+                        ->setLongitude($mapCoordinates[$k]['longitude'])
+                        ->setRunner($this->getReference("runner-" . $j));
                     $manager->persist($coords);
-                    $coordsDate = $coordsDate->modify('+' . $speed . ' seconds');
+                    $coordsDateRunner = $coordsDateRunner->modify('+' . $speed . ' seconds');
                 }
                 $coordsDate->modify("+1 day");
             }
