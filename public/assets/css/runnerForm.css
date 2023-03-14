@@ -5,7 +5,7 @@
 body {
   width: 100vw;
   height: 100vh;
-  overflow-inline: hidden;
+  overflow-x: hidden;
 }
 .bg-img {
   width: 105vw;
@@ -46,28 +46,79 @@ form h1 {
   text-align: center;
   color: white;
 }
-#runner > div {
+#runner > div,
+#form > div,
+#run > div {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-#runner > div > label {
+#runner > div > label,
+#form > div > label,
+#run > div > label {
   margin-bottom: 5px;
   font-size: 18px;
   color: white;
 }
 
-#runner > div > input {
+#runner > div > input,
+#form > div > input,
+#run > div > input {
   width: 225px;
   height: 40px;
-  border: solid white;
   background: rgba(0, 0, 0, 0.3);
   border: 2px solid #eef6fe;
   color: white;
   border-radius: 10px;
   padding-left: 15px;
   font-size: 18px;
+}
+#form_map {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+label[for="form_map"] {
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+  transition-property: background-color;
+  width: fit-content;
+  padding-block: 5px;
+  padding-inline: 10px;
+  border: 2px solid #eef6fe;
+}
+label[for="form_map"]:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+#form_run_date,
+#run_run_date {
+  color: #eef6fe;
+}
+#form_run_date select,
+#run_run_date select {
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #eef6fe;
+  color: white;
+  border-radius: 10px;
+  margin-right: 5px;
+}
+#form_run_date div,
+#run_run_date div {
+  margin-bottom: 5px;
+}
+#form_runner {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #eef6fe;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
 }
 
 .btn {
@@ -87,8 +138,7 @@ form h1 {
 }
 
 .retour {
-  position: absolute;
-  bottom: 100px;
+  margin-top: 50px;
   color: white;
   font-size: 14px;
   font-weight: bold;

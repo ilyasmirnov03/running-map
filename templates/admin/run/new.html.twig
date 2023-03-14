@@ -6,4 +6,11 @@
     <h1>Create new Run</h1>
 
     {{ include('admin/_form.html.twig', {'h1_label': 'Créer une nouvelle course'}) }}
+    {% block javascripts %}
+    <script>
+        label = document.querySelector("label[for=\"form_map\"]");
+        label.innerText = "Choisissez l'image de la map";
+    </script>
+    {% endblock %}
+    
 {% endblock %}
