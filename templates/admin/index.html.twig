@@ -12,7 +12,7 @@
 
 
 {% block body %}
-
+	
 	<header>
 		<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img">
 		<div class="notifications">
@@ -45,7 +45,7 @@
 	</section>
 	
 	<section class="gest-notif">
-		
+	<span class="notif-bg"></span>
 		<div>
 			<span class="close"><i class="fa-sharp fa-solid fa-circle-xmark"></i></span>
 			<h2>Demandes d'inscription aux courses: {{requests|length}}</h2>
@@ -72,7 +72,7 @@
 			{% endfor %}
 		</div>
 	</section>
-	<div class="nav">
+	{# <div class="nav">
 		<ul>
 			<li class="nav__list">
 				<a href="#">
@@ -94,7 +94,7 @@
 			</li>
 			<div class="indicator"></div>
 		</ul>	
-	</div>
+	</div> #}
 			
 			{% block javascripts %}
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
