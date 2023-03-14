@@ -2,28 +2,34 @@
 
 {% block title %}Runner
 {% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/adminRunnerIndex.css") }}">
+{% endblock %}
 
 {% block body %}
-	<h1>Gerer les profils</h1>
-
+	<div class="adminHeader">
+		<a href="{{ path('app_admin_index') }}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
+		<a href="{{ path('app_admin_index') }}">Accueil</a>
+	</div>
+	<h1>Gérer les profils</h1>
 	<table class="table">
 		<thead>
 			<tr>
 				<th>Login</th>
 				<th>Picture</th>
-				<th>actions</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for runner in runners %}
-				<tr>
+				<tr class="runnerProfile">
 					<td>{{ runner.login }}</td>
 					<td>{{ runner.picture }}</td>
-					<td>
-						<div>
-							<a href="{{ path('app_admin_runner_edit', {'id': runner.id}) }}">edit</a>
-							{{ include('admin/runner/_delete_form.html.twig') }}
-						</div>
+					<td class="actions">
+						<a href="{{ path('app_admin_runner_edit', {'id': runner.id}) }}" class="mod-btn">Modifier</a>
+						<a href="">{{ include('admin/runner/_delete_form.html.twig') }}</a>
 					</td>
 				</tr>
 			{% else %}
@@ -33,8 +39,6 @@
 			{% endfor %}
 		</tbody>
 	</table>
-
-	<a href="{{ path('app_admin_index') }}">back to list</a>
 
 
 {% endblock %}

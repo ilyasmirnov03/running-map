@@ -81,7 +81,7 @@ header {
   transition: 0.5s;
 }
 .gest-notif > div {
-  transform: translateY(30%);
+  transform: translateY(25%);
   z-index: 10;
   position: absolute;
   background: rgba(255, 255, 255, 0.9);
