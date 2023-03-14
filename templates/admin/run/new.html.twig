@@ -3,9 +3,17 @@
 {% block title %}New Run{% endblock %}
 
 {% block body %}
-    <h1>Create new Run</h1>
 
-    {{ include('admin/_form.html.twig') }}
-
-    <a href="{{ path('app_admin_index') }}">back to list</a>
+    {{ include('admin/_form.html.twig', {'h1_label': 'Créer une nouvelle course'}) }}
+    {% block javascripts %}
+    <script>
+        label = document.querySelector("label[for=\"form_map\"]");
+        console.log(label);
+        label.innerText = "Choisissez l\'image de la map";
+       
+        
+        
+    </script>
+    {% endblock %}
+    
 {% endblock %}

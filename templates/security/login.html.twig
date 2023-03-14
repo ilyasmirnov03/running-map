@@ -2,24 +2,37 @@
 
 {% block title %}Log in!{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/login.css") }}">
+{% endblock %}
+
 {% block body %}
-<form method="post">
+
+<form method="post" class="form">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+        <div class="logout">
+            Vous êtes connecté en tant que <b>{{ app.user.userIdentifier }}</b>, <a href="{{ path('app_logout') }}">Me déconnecter</a>
         </div>
     {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Connectez-vous à votre profil</h1>
-    <label for="inputLogin">Nom d'utilisateur</label>
-    <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" autocomplete="username" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
+    <img src="{{ asset("assets/images/logo-complet.png") }}" alt="" class="logo">
+    <div class="form__connexion">
+        <h1 class="h3 mb-3 font-weight-normal" class="form__title">Connectez-vous à votre profil</h1>
+        <div class="inputs">
+            <label for="inputLogin">Nom d'utilisateur :</label>
+            <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" autocomplete="username" required autofocus>
+        </div>
+        <div class="inputs">
+            <label for="inputPassword">Mot de passe :</label>
+            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        </div>
+        <button class="btn-connexion" type="submit">Connexion</button>
+    </div>
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
@@ -35,8 +48,7 @@
         </div>
     #}
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
+    
 </form>
+<img src="{{ asset("assets/images/login-background.png") }}" alt="" class="bg-img">
 {% endblock %}

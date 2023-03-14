@@ -1,28 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Les courses{% endblock %}
-
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/adminRunnerIndex.css") }}">
+{% endblock %}
 {% block body %}
-    <h1>Run index</h1>
-
+    <div class="adminHeader">
+		<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="">
+		<a href="{{ path('app_admin_index') }}">Accueil</a>
+	</div>
+    <h1>Gérer les courses</h1>
+    <a href="{{ path('app_admin_run_new') }}" class="p-button" style="margin-bottom:50px;">Créer une nouvelle course</a>
     <table class="table">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Map</th>
                 <th>Run_date</th>
-                <th>actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for run in runs %}
-            <tr>
+            <tr class="runnerProfile">
                 <td>{{ run.name }}</td>
                 <td>{{ run.map }}</td>
-                <td>{{ run.runDate ? run.runDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_admin_run_edit', {'id': run.id}) }}">edit</a>
-                    {{ include('admin/run/_delete_form.html.twig') }}
+                <td>{{ run.runDate ? run.runDate|date('H:i:s d-m-Y') : '' }}</td>
+                <td class="actions">
+                    <a href="{{ path('app_admin_run_edit', {'id': run.id}) }}" class="mod-btn">Modifier</a>
+                    <a href="">{{ include('admin/run/_delete_form.html.twig') }}</a>
                 </td>
             </tr>
         {% else %}
@@ -33,6 +41,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_admin_index') }}">Revenir</a>
-    <a href="{{ path('app_admin_run_new') }}">Create new</a>
+    
 {% endblock %}
