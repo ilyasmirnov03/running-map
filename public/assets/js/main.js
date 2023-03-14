@@ -16,20 +16,30 @@ const Run = {
 
 const WS = {
     init: async (run_id, port = 3001) => {
-        WS.server = new WebSocket(`ws://localhost:${port}/${run_id}`);
+        WS.id = run_id;
+        WS.server = new WebSocket(`ws://localhost:${port}`);
         WS.server.addEventListener("open", WS.onOpen);
         WS.server.addEventListener("message", WS.onMessage);
     },
-    onOpen: (e) => {
-        // console.log(e);
-        // WS.send({ name: "Test", message: "Hello World" });
+    onOpen: async (e) => {
+        // WS.send({ run_id: WS.id, is_admin: true, function: "connect" });
+        WS.send({ run_id: WS.id, runner_id: 0, function: "connect" });
+        // WS.send({ run_id: WS.id, runner_id: 0, function: "coords", coords: [1, 5] });
+        // ! IF IS RUNNER THIS THING UNDER SHOULD BE DISABLED
+        const f = await fetch(`/coords/${WS.id}/${new Date().getTime()}`);
+        const c = await f.json();
+        console.log(c);
+        await App.loadMarkers(c);
     },
+    // ! IF IS RUNNER THIS FUNC SHOULD BE DISABLED
     onMessage: async (e) => {
-        console.log(e.data);
-        // await App.loadMarkers([]); // ! PLUG RUNNERS FROM TABLE
+        console.log(JSON.parse(e.data));
+        if(e.data.coords) {
+            App.updateMarkers([e.data]);
+        }
     },
     send: (message) => {
-        // console.log(message);
+        console.log(message);
         WS.server.send(JSON.stringify(message));
     }
 }
