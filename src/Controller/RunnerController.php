@@ -96,6 +96,14 @@ class RunnerController extends AbstractController
         ]);
     }
 
+    #[Route('/run/{id}', name: 'app_runner_run')]
+    public function run(Run $run, RunnerRepository $runnerRepository): Response
+    {
+        return $this->render('runner/run.html.twig', [
+            'run' => $run
+        ]);
+    }
+
     #[Route('/participate/{id}', name: 'app_runner_participate')]
     public function participate(RunJoinRequestRepository $runJoinRequestRepository, Run $run): RedirectResponse
     {

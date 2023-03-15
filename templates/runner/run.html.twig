@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Running -
+	{{app.user.login}}
+{% endblock %}
+
+{% block body %}
+	<div>
+        Tu cours sur la course {{run.name}}
+	</div>
+    <script defer>
+        const UserId = {{app.user.id}};
+        const RunId = {{run.id}};
+    </script>
+    <script src="{{ asset('/assets/js/runner.js') }}" defer></script>
+{% endblock %}
