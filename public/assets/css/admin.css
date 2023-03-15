@@ -1,0 +1,139 @@
+h1 {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+h1 span {
+  color: #3a859a;
+}
+
+header {
+  margin-block: 2.1875rem;
+  width: 95vw;
+  display: flex;
+  justify-content: space-around;
+}
+
+.header__img {
+  width: 2.5rem;
+  height: auto;
+}
+
+.notifications {
+  position: relative;
+  font-size: 2.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.notifications:hover {
+  transform: translateY(-5px);
+}
+.notifications__icon {
+  width: 2.5rem;
+  font-size: 2.5rem;
+}
+.notifications span {
+  position: absolute;
+  z-index: 2;
+  top: 10%;
+  right: 5%;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 1.25rem;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.notifications span p {
+  font-size: 13px;
+  color: white;
+  font-weight: bold;
+}
+
+.gestion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gestion > div {
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+
+  margin-bottom: 2.5rem;
+}
+.gestion > div > h2 {
+  margin-bottom: 1.25rem;
+  font-size: 1.75rem;
+}
+
+.gest-notif {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.5s;
+}
+.gest-notif > div {
+  transform: translateY(25%);
+  z-index: 10;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0px 0px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  width: 80vw;
+  padding: 2rem 2.5rem;
+}
+.gest-notif > div > h2 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.75rem;
+}
+
+.gest-notif > div > div > p {
+  font-size: 20px;
+}
+
+.close {
+  color: #d61f1f;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.cursor:hover {
+  transform: translateY(-5px);
+}
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: solid 4px;
+}
+
+.logout {
+  color: #3a859a;
+}
+.logout a {
+  font-weight: bold;
+  color: #3a859a;
+}
+
+.notif-bg {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  z-index: 2;
+  cursor: pointer;
+}

@@ -35,8 +35,8 @@ class MapController extends AbstractController
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         $runners = array();
-        $coords = array();
         foreach ($run->getRunners() as $runner) {
+            $coords = array();
             foreach ($coordinatesRepository->findBy(["run" => $run, "runner" => $runner]) as $coord) {
                 array_push($coords, ["latitude" => $coord->getLatitude(), "longitude" => $coord->getLongitude(), "date" => $coord->getCoordsDate()->format('U')]);
             }
