@@ -20,8 +20,10 @@
                 Math.floor(new Date().getTime() / 1000.0)
             );
             const UserCoords = coords.find(user => user.runner.id === RunnerInterface.id).coords;
-            console.log(UserCoords);
-            WS.send({ run_id: RunnerInterface.run_id, runner_id: RunnerInterface.id, coords: UserCoords, function: "update" });
+            console.log(coords);
+
+            // ! HERE WE POST ALL COORDS AS IF WE WERE ALL RUNNER IN TIME JUST TO TEST (REPLACE WITH UserCoords)
+            WS.send({ run_id: RunnerInterface.run_id, runner_id: RunnerInterface.id, coords: coords, function: "update" });
         },
         fetch_run: async (timestamp) => {
             const f = await fetch(`/coords/${RunnerInterface.run_id}/${timestamp}`);
@@ -37,7 +39,6 @@
             WS.server.addEventListener("message", WS.onMessage);
         },
         onOpen: async (e) => {
-            console.log(e.data);
             WS.send({ run_id: RunnerInterface.run_id, runner_id: RunnerInterface.id, function: "connect" }); // RUNNER
         },
         send: (message) => {

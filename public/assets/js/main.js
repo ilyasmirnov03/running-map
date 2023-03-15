@@ -80,6 +80,7 @@
         },
         onMessage: async (e) => {
             const data = JSON.parse(e.data);
+            console.log(data);
             if(data.coords) {
                 App.MARKERS[data.runner].update(data.coords);
             }

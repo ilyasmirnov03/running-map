@@ -78,13 +78,26 @@ class MessageHandler implements MessageComponentInterface
         }
         if($this->runs[$data->run_id]["runners"][$data->runner_id] == $from) {
             $from->send(json_encode("..:: Updating coords.. ::.."));
-            echo "Updating coords \n";
+            // echo "Updating coords \n";
             foreach ($this->runs[$data->run_id]["watchers"] as $key => $conn) {
-                $conn->send(json_encode(array(
-                    "run_id" => $data->run_id,
-                    "runner" => $data->runner_id,
-                    "coords" => $data->coords
-                )));
+                // ! THIS IS FOR TESTING ONLY 
+                $conn->send(json_encode("..:: Updating coords.. ::.."));
+                if(is_array($data->coords)) {
+                    echo "Updating all coords";
+                    foreach($data->coords as $key => $value) {
+                        $conn->send(json_encode(array(
+                            "run_id" => $data->run_id,
+                            "runner" => $value->runner->id,
+                            "coords" => $value->coords
+                        )));
+                    }
+                } else {
+                    $conn->send(json_encode(array(
+                        "run_id" => $data->run_id,
+                        "runner" => $data->runner_id,
+                        "coords" => $data->coords
+                    )));
+                }
             }
         }
     }
