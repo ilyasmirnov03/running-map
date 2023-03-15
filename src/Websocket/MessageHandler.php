@@ -83,7 +83,7 @@ class MessageHandler implements MessageComponentInterface
                 // ! THIS IS FOR TESTING ONLY 
                 $conn->send(json_encode("..:: Updating coords.. ::.."));
                 if(is_array($data->coords)) {
-                    echo "Updating all coords";
+                    echo "Updating all coords \n";
                     foreach($data->coords as $key => $value) {
                         $conn->send(json_encode(array(
                             "run_id" => $data->run_id,

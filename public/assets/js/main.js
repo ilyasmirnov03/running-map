@@ -113,7 +113,7 @@
             if(this.pos && !this.speed) {
                 let distance = Utility.distance_fp(this.pos.latitude, this.pos.longitude, coords.latitude, coords.longitude);
                 let timespend = coords.date - Math.floor(new Date().getTime() / 1000.0);
-                this.speed = (distance / (timespend / 60 / 60)).toFixed(2);
+                this.speed = Math.abs((distance / (timespend / 60 / 60)).toFixed(2));
             }
             this.pos = coords;
             this.object.setLatLng([coords.latitude, coords.longitude]);
