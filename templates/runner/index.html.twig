@@ -5,22 +5,22 @@
 {% endblock %}
 
 {% block body %}
-
-	<div>
-        {% for run in runs %}
+	<a href="{{ path('app_runner_profile', {'id': user.id}) }}">Voir mon profil</a>
+	{% for run in runs %}
+		<div>
 			<p>{{run.name}}</p>
 			{# if requested to join #}
 			{% if run in requests %}
 				<p>demande en cours</p>
-			{# if request accepted #}
+				{# if request accepted #}
 			{% elseif user in run.getRunners %}
 				<p>Participation accepte</p>
-			{# if none above then able to request to participate #}
+				{# if none above then able to request to participate #}
 			{% else %}
 				<a href="{{path('app_runner_participate', {'id': run.id})}}">participer</a>
 			{% endif %}
+		</div>
 		{% else %}
 			<p>Aucune course est disponible en ce moment.</p>
-		{% endfor %}
-	</div>
+	{% endfor %}
 {% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{runner.login}}{% endblock %}
+
+{% block body %}
+	<section>
+		<h1>Bienvenue sur
+			{{(connectedUser) ? 'votre' : 'le'}}
+			profil
+			{{runner.login}}</h1>
+			<img src="{{asset("/assets/users/" ~ runner.picture)}}" alt="">
+		<div>
+			{# shows different text depending on user seeing the page #}
+			<h2>{{(connectedUser) ? 'Vos dernières courses' : 'Les dernieres courses de ' ~ runner.login}}</h2>
+			<div>
+				{% for run in runner.getRuns %}	
+                    <p>{{run.name}}</p>
+                    {% if run.runDate|date() < "now"|date() and not run.finishedAt %}
+                        <p>La course est en live.</p>
+                    {% elseif run.runDate|date() >= "now"|date() %}
+                        <p>Commence le {{run.runDate|date("d M Y, à    H:i:s")}}</p>
+                    {% elseif run.finishedAt %}
+                        <p>Faite le {{run.runDate|date("d M Y, à    H:i:s")}}</p>
+                    {% endif %}
+				{% else %}
+					<p>Aucune course.</p>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+    <section>
+        <h2>{{(connectedUser) ? 'Vos statistiques' : 'Les statistiques de ' ~ runner.login}}</h2>
+    </section>
+	<section>
+		<h2>Modifier la photo de profil</h2>
+			<img src="{{asset("/assets/users/" ~ runner.picture)}}" alt="">
+			<a href="{{path('app_runner_edit', {'id': app.user.id})}}">modifier sa photo de profil</a>
+	</section>
+{% endblock %}
