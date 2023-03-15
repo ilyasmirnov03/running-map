@@ -28,7 +28,7 @@ class Run
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $run_date = null;
 
-    #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'Run', cascade: ["remove"])]
+    #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'run', cascade: ["remove"])]
     private Collection $runner;
 
     #[ORM\OneToMany(mappedBy: 'run', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
