@@ -51,7 +51,7 @@
             RunHistory.rangeInput.value = 0;
             RunHistory.timeout = null;
             RunHistory.rangeInput.addEventListener('input', RunHistory.updateTimestamp);
-            App.initMarkers(await Utility.fetch_run(App.run.date));
+            App.initMarkers(await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0)));
         },
         updateTimestamp: (evt) => {
             if(!RunHistory.rangeInput) return;
@@ -75,15 +75,13 @@
             WS.server.addEventListener("message", WS.onMessage);
         },
         onOpen: async (e) => {
-            App.initMarkers(await Utility.fetch_run(App.run.date));
+            App.initMarkers(await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0)));
             WS.send({ run_id: WS.id, function: "connect" }); // WATCHER
-           // WS.send({ run_id: WS.id, runner_id: 12, function: "connect" }); // RUNNER
-           // WS.send({ run_id: WS.id, runner_id: 12, coords: [], function: "update" }); // UPDATE
         },
         onMessage: async (e) => {
-            console.log(e.data);
-            if(e.data.coords) {
-                App.MARKERS[e.data.runner].update(e.data.coords);
+            const data = JSON.parse(e.data);
+            if(data.coords) {
+                App.MARKERS[data.runner].update(data.coords);
             }
         },
         send: (message) => {
@@ -113,6 +111,7 @@
         setCoords(coords) {
             if(this.pos && !this.speed) {
                 let distance = Utility.distance_fp(this.pos.latitude, this.pos.longitude, coords.latitude, coords.longitude);
+                let timespend = coords.date - Math.floor(new Date().getTime() / 1000.0);
                 this.speed = (distance / (timespend / 60 / 60)).toFixed(2);
             }
             this.pos = coords;
@@ -122,6 +121,8 @@
             this.object._popup.setContent(`Coureur : ${this.runner.login ?? "Mr.Cheater"} <br> Vitesse coureur : ${this.speed ?? 0} km/h`)
         }
         update (coords, speed = null) {
+            console.log(coords);
+            if(this.pos?.latitude == coords.latitude && this.pos?.longitude == coords.longitude) return;
             this.speed = speed;
             this.setCoords(coords);
             this.setPopup();
@@ -138,10 +139,10 @@
         },
         distance_fp: (lat1, lon1, lat2, lon2) => {
             var R = 6371; // ? earth km
-            var dLat = toRad(lat2-lat1);
-            var dLon = toRad(lon2-lon1);
-            var lat1 = toRad(lat1);
-            var lat2 = toRad(lat2);
+            var dLat = Utility.to_rad(lat2-lat1);
+            var dLon = Utility.to_rad(lon2-lon1);
+            var lat1 = Utility.to_rad(lat1);
+            var lat2 = Utility.to_rad(lat2);
             var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
                 Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 

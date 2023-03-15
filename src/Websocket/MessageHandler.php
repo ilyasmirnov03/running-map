@@ -10,11 +10,11 @@ use Symfony\Component\Validator\Constraints\Unique;
 
 class MessageHandler implements MessageComponentInterface
 {
-    protected $connections, $run, $container;
+    protected $connections, $runs, $container;
 
     public function __construct()
     {
-        $this->run = array();
+        $this->runs = array();
         $this->connections = array();
     }
 
@@ -34,70 +34,67 @@ class MessageHandler implements MessageComponentInterface
         }
     }
 
-    public function updateCoords($data, $from) {
-        if(isset($data->run_id) && isset($data->runner_id)) {
-            if(isset($this->run[$data->run_id]) && $this->run[$data->run_id][$data->runner_id] == $from) {
-                foreach($this->run[$data->run_id] as $key => $conn){
-                    if($conn !== $from){
-                        $conn->send(json_encode(array(
-                            "run_id" => $data->run_id,
-                            "runner" => $data->runner_id,
-                            "coords" => $data->coords
-                        )));
-                    }
+    public function connectToRun(object $data, ConnectionInterface $from) {
+        if(!isset($data->run_id)) {
+            $from->close();
+        }
+        if(!isset($this->runs[$data->run_id])) {
+            $this->runs[$data->run_id] = array(
+                "runners" => array(),
+                "watchers" => array()
+            );
+            $from->send(json_encode("..:: Created run $data->run_id ::.."));
+            echo "New run $data->run_id \n";
+        }
+        if(isset($data->runner_id)) {
+            // ! CONNECT AS RUNNER
+            foreach($this->connections as $key => $conn){
+                if($conn === $from){
+                    $this->runs[$data->run_id]["runners"][$data->runner_id] = $from;
+                    unset($this->connections[$key]);
+                    $from->send(json_encode("..:: Joined run $data->run_id as runner $data->runner_id ::.."));
+                    echo "New runner joined $data->run_id as $data->runner_id \n";
+                    break;
+                }
+            }
+        } else {
+            // ! CONNECT AS WATCHER
+            foreach($this->connections as $key => $conn){
+                if($conn === $from){
+                    $uniqueId = uniqid() . uniqid();
+                    $this->runs[$data->run_id]["watchers"][$uniqueId] = $from;
+                    unset($this->connections[$key]);
+                    $from->send(json_encode("..:: Joined run $data->run_id as watcher $uniqueId ::.."));
+                    echo "New watcher joined $data->run_id as $uniqueId \n";
+                    break;
                 }
             }
         }
     }
 
-    public function connectToRun(object $data, ConnectionInterface $conn) {
-        if(isset($data->run_id)) {
-            if(isset($this->run[$data->run_id])) {
-                if(!isset($data->runner_id)) {
-                    // ! WATCHER/ADMIN
-                    $data->runner_id = uniqid() . uniqid();
-                }
-                foreach($this->connections as $key => $exist){
-                    if($conn === $exist){
-                        $this->run[$data->run_id][$data->runner_id] = $conn;
-                        unset($this->connections[$key]);
-                        break;
-                    }
-                }
-                $conn->send(json_encode('..:: Connected in run '.$data->run_id.' as '.$data->runner_id.' ::..'));
-                echo "New connection $data->run_id \n";
-            } else {
-                // ! CREATING RUN FROM RUN ID
-                if(isset($this->run[$data->run_id])) {
-                    $conn->close();
-                }
-
-                $this->run[$data->run_id] = array();
-                // ! IS ADMIN
-                $data->runner_id = uniqid() . uniqid();
-
-                foreach($this->connections as $key => $exist){
-                    if($conn === $exist){
-                        $this->run[$data->run_id][$data->runner_id] = $conn;
-                        unset($this->connections[$key]);
-                        break;
-                    }
-                }
-
-                $conn->send(json_encode('..:: Connected in run '.$data->run_id.' as '.$data->runner_id.' and creating run ::..'));
-                echo "New insert connection $data->run_id \n";
+    public function updateCoords(object $data, ConnectionInterface $from) {
+        if (!isset($data->run_id) || !isset($data->runner_id)) {
+            $from->close();
+        }
+        if($this->runs[$data->run_id]["runners"][$data->runner_id] == $from) {
+            $from->send(json_encode("..:: Updating coords.. ::.."));
+            echo "Updating coords \n";
+            foreach ($this->runs[$data->run_id]["watchers"] as $key => $conn) {
+                $conn->send(json_encode(array(
+                    "run_id" => $data->run_id,
+                    "runner" => $data->runner_id,
+                    "coords" => $data->coords
+                )));
             }
-        } else {
-            $conn->close();
         }
     }
 
     public function onClose(ConnectionInterface $conn)
     {
-        foreach($this->run as $id => $container){
+        foreach($this->runs as $id => $container){
             foreach($container as $key => $conn_element)
             if($conn === $conn_element){
-                unset($this->run[$id][$key]);
+                unset($this->runs[$id][$key]);
                 break;
             }
         }
@@ -109,4 +106,3 @@ class MessageHandler implements MessageComponentInterface
         $conn->close();
     }
 }
-?>
