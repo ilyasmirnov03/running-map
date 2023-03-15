@@ -8,13 +8,29 @@
 {% endblock %}
 {% block title %}{{run.name}}{% endblock %}
 
+{% block javascripts %}
+			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
+		    <script src="{{ asset("assets/js/navbar.js") }}"></script>
+            <script>
+                const Run = {
+                    id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
+                };
+            </script>
+{% endblock %}
+
 {% block body %}
     <section class="header">
         <a href=""><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
         <a href=""><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
         {# <a href=""><img src="" alt=""></a> #}
     </section>
-    <h2>Course en cours</h2>
+    <div>
+        {% if not run.finishedAt and run.runDate|date() <= "now"|date() %}
+            <h2>Course {{run.name}}<span>LIVE</span></h2>
+        {% else %}
+            <h2>Course {{run.name}}</h2>
+        {% endif %}
+    </div>
     <section class="activeRun">
         <div id="map"></div>
         <div>
@@ -67,14 +83,4 @@
                 <div class="indicator"></div>
             </ul>	
 	    </div>
-    
-    {% block javascripts %}
-			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
-		    <script src="{{ asset("assets/js/navbar.js") }}"></script>
-            <script>
-                const Run = {
-                    id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
-                };
-            </script>
-    {% endblock %}
 {% endblock %}
