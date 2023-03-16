@@ -5,25 +5,56 @@
     });
 
     const RunnerInterface = {
+        RUN_MODE: 2,
+        DEMO_MODE: 1,
         init: async () => {
-            console.log(RunId);
-            RunnerInterface.id = UserId;
-            RunnerInterface.run_id = RunId;
 
-            RunnerInterface.interval = setInterval(async () => {
-                await RunnerInterface.update();
-            }, 5000)
+            RunnerInterface.mode = RunnerInterface.DEMO_MODE; // ! DEFINE DEMO MODE
+
+            RunnerInterface.id = UserId; // TWIG IMPORT
+            RunnerInterface.run_id = RunId; // TWIG IMPORT
+
+            if(RunnerInterface.mode === RunnerInterface.RUN_MODE) {
+                RunnerInterface.getCoords();
+            } else {
+                RunnerInterface.interval = setInterval(async () => {
+                    await RunnerInterface.update();
+                }, 5000); // DEMO MODE
+            }
 
         },
-        update: async () => {
-            const coords = await RunnerInterface.fetch_run(
-                Math.floor(new Date().getTime() / 1000.0)
-            );
-            const UserCoords = coords.find(user => user.runner.id === RunnerInterface.id).coords;
-            console.log(coords);
-
-            // ! HERE WE POST ALL COORDS AS IF WE WERE ALL RUNNER IN TIME JUST TO TEST (REPLACE WITH UserCoords)
-            WS.send({ run_id: RunnerInterface.run_id, runner_id: RunnerInterface.id, coords: coords, function: "update" });
+        getCoords: () => {
+            if ('geolocation' in navigator) {
+                document.addEventListener('click', function () {
+                  navigator.geolocation.getCurrentPosition(function (location) {
+                    RunnerInterface.update(location);
+                  });
+                  RunnerInterface.position = navigator.geolocation.watchPosition(RunnerInterface.update);
+                });
+              } else {
+                console.log('Geolocation API not supported.');
+              }
+        },
+        update: async (data) => {
+            if(RunnerInterface.mode === RunnerInterface.RUN_MODE) {
+                console.log(data);
+                const Coords = {
+                    latitude: data.coords.latitude,
+                    longitude: data.coords.longitude,
+                    date: Math.floor(data.timestamp / 1000.0),
+                }
+                console.log("REAL COORDS");
+                console.log(Coords);
+                WS.send({ run_id: RunnerInterface.run_id, runner_id: RunnerInterface.id, coords: Coords, function: "update" });
+            } else {
+                const coords = await RunnerInterface.fetch_run(
+                    Math.floor(new Date().getTime() / 1000.0)
+                );
+                const UserCoords = coords.find(user => user.runner.id === RunnerInterface.id).coords;
+                console.log(coords);
+                // ! HERE WE POST ALL COORDS AS IF WE WERE ALL RUNNER IN TIME JUST TO TEST (REPLACE WITH UserCoords)
+                WS.send({ run_id: RunnerInterface.run_id, runner_id: RunnerInterface.id, coords: coords, function: "update" });
+            }
         },
         fetch_run: async (timestamp) => {
             const f = await fetch(`/coords/${RunnerInterface.run_id}/${timestamp}`);
