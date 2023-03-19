@@ -16,7 +16,7 @@
     </section>
     <h2>Course en cours</h2>
     <form class="activeRun" method="POST">
-        <div id="map"></div>
+        <a id="map" href="/map/{{run.id}}"></a>
         <div class="activeRun__infos">
             <h3>{{run.name}}</h3>
             <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
