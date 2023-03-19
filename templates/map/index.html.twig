@@ -15,15 +15,15 @@
         {# <a href=""><img src="" alt=""></a> #}
     </section>
     <h2>Course en cours</h2>
-    <section class="activeRun">
+    <form class="activeRun" method="POST">
         <div id="map"></div>
         <div class="activeRun__infos">
             <h3>{{run.name}}</h3>
             <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
         </div>
-        <a href="" class="p-button" style="font-size:28px; margin-top:18px;">Voir la course</a>
-    </section>
-    <h2>Courses en cours</h2>
+        <a href="/map/{{run.id}}" class="p-button" style="font-size:28px; margin-top:18px;">Voir la course</a>
+    </form>
+    <h2>Prochaines courses</h2>
     <section class="allRuns">
         <div class="maps">
             <div class="map active"></div>
@@ -40,7 +40,7 @@
     <div class="nav">
             <ul>
                 <li class="nav__list ">
-                    <a href="" >
+                    <a href="/map/{{run.id}}" >
                         <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
                         <span class="nav__list--text">Courses</span>
                     </a>
