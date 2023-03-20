@@ -20,8 +20,8 @@
 
 {% block body %}
     <section class="header">
-        <a href=""><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
-        <a href=""><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
+        <a href="{{path('app_map_index')}}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
+        <a href="{{path('app_login')}}"><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
         {# <a href=""><img src="" alt=""></a> #}
     </section>
     <div>
@@ -75,7 +75,7 @@
                     </a>
                 </li>
                 <li class="nav__list">
-                    <a href="#">
+                    <a href="{{path("app_login")}}">
                         <span class="nav__list--icon"><i class="fa-solid fa-user"></i></span>
                         <span class="nav__list--text">Profil</span>
                     </a>
