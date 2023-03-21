@@ -52,8 +52,8 @@ class RunRepository extends ServiceEntityRepository
     public function findUpcomingRuns()
     {
         return $this->createQueryBuilder('d')
-            ->where('d.finished_at is null', 'd.run_date > CURRENT_DATE()')
-            ->orderBy('d.run_date', 'ASC')
+            ->where('d.finished_at is null', 'd.run_date > CURRENT_TIMESTAMP()')
+            ->orderBy('d.run_date', 'DESC')
             ->getQuery()
             ->getResult();
     }

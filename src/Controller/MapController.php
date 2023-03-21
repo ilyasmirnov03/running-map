@@ -7,7 +7,6 @@ use App\Repository\CoordinatesRepository;
 use App\Repository\RunRepository;
 use App\Service\ToolboxService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,10 +15,10 @@ class MapController extends AbstractController
     #[Route('/', name: 'app_map_index')]
     public function index(RunRepository $runRepository): Response
     {
-        /* return $this->render('map/home.html.twig', [
-            'run' =>  $runRepository->findLatest()[0]
-        ]); */
-        return new Response(dump($runRepository->findUpcomingRuns()));
+        return $this->render('map/home.html.twig', [
+            'run' =>  $runRepository->findLatest()[0],
+            'upcomingRuns' => $runRepository->findUpcomingRuns()
+        ]);
     }
 
     #[Route('/map/{id}', name: 'app_map_id')]
