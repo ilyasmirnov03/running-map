@@ -51,7 +51,7 @@ h2 {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: 80vw;
+  margin-bottom: 1rem;
 }
 .activeRun__infos h3 {
   margin-top: 15px;
@@ -65,20 +65,11 @@ h2 {
 
 .allRuns {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  height: 55vh;
+  justify-content: center;
+  gap:1rem;
+  padding:3rem 0;
 }
-.allRuns__buttons {
-  display: flex;
-  width: 80vw;
-  justify-content: space-between;
-}
-.maps {
-  display: flex;
-  justify-content: flex-start;
-}
+
 .map {
   height: 250px;
   width: 250px;

@@ -45,21 +45,27 @@
         </div>
         <a href="" class="p-button" style="font-size:28px; margin-top:18px;">Voir la course</a>
     </section>
-    <h2>Courses en cours</h2>
+    <h2>Courses a venir</h2>
     <section class="allRuns">
-        <div class="maps">
-            <div class="map active"></div>
+    {% for run in upcomingRuns %}
+        <div class="run">
+            <div class="maps">
+                <div class="map active"></div>
+            </div>
+            <div class="activeRun__infos">
+                <h3>{{run.name}}</h3>
+                <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
+            </div>
+            <div class="allRuns__buttons">
+                {% if is_granted('ROLE_RUNNER') %}
+                    <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
+                {% endif %}
+                <a href="" class="s-button" style="font-size:24px; margin-top:18px;">+ d'infos</a>
+            </div>
         </div>
-        <div class="activeRun__infos">
-            <h3>{{run.name}}</h3>
-            <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
-        </div>
-        <div class="allRuns__buttons">
-            {% if is_granted('ROLE_RUNNER') %}
-                <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
-            {% endif %}
-            <a href="" class="s-button" style="font-size:24px; margin-top:18px;">+ d'infos</a>
-        </div>     
+    {% else %}
+        <p>Aucune course n'est programmee.</p>
+    {% endfor %}
     </section>
     <div class="nav">
             <ul>
