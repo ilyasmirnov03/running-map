@@ -22,7 +22,6 @@
     <section class="header">
         <a href="{{path('app_map_index')}}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
         <a href="{{path('app_login')}}"><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
-        {# <a href=""><img src="" alt=""></a> #}
     </section>
     <div>
         {% if not run.finishedAt and run.runDate|date() <= "now"|date() %}
@@ -56,7 +55,9 @@
             <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
         </div>
         <div class="allRuns__buttons">
-            <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
+            {% if is_granted('ROLE_RUNNER') %}
+                <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
+            {% endif %}
             <a href="" class="s-button" style="font-size:24px; margin-top:18px;">+ d'infos</a>
         </div>     
     </section>
