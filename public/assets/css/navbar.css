@@ -25,6 +25,7 @@
   width: 21.25rem;
   color: white;
   border-radius: 1.5625rem;
+  border: solid 0.375rem white;
 }
 
 .nav__list {
@@ -79,7 +80,6 @@
   transform: translateX(0px);
   transition: 0.5s;
 }
-
 
 .nav ul li:nth-child(1).active ~ .indicator {
   transform: translateX(-113px);
