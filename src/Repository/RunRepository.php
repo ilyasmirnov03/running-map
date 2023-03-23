@@ -57,6 +57,17 @@ class RunRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    
+    public function findPastRuns()
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.finished_at is not null')
+            ->orderBy('d.finished_at', 'DESC')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->getResult();
+    }
+    
 
     //    /**
     //     * @return Run[] Returns an array of Run objects
