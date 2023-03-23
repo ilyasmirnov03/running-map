@@ -17,9 +17,13 @@
             {% endif %}
             <p>Debut de course : {{run.runDate|date('Y-m-d H:i:s')}}</p>
             <p>Fin de course : {{run.finishedAt ? run.finishedAt|date('Y-m-d H:i:s') : "la course n'est pas terminee."}}</p>
+            <a href="#stats" class"goStats" >Voir les participants</a>
+        </div>
+        <div class"partButton">
+            
         </div>
     </div>
-    <div class="stats">
+    <div id="stats">
         <h2>Participants :</h2>
         <div class="participants">
             <div class="participant">
