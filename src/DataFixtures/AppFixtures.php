@@ -168,10 +168,11 @@ class AppFixtures extends Fixture
         $j = runner
         $k = coords
         */
+        $coordsDate = new \DateTimeImmutable();
+        $coordsDate = $coordsDate->modify("+1 minute");
+        
         for ($i = 1; $i < 3; $i++) {
             $mapCoordinates = $this->toolboxService->getCoordinates("map-" . $i . ".kml");
-            $coordsDate = new \DateTimeImmutable();
-            $coordsDate = $coordsDate->modify("+1 minute");
             for ($j = 1; $j < self::N_RUNNERS; $j++) {
                 $speed = random_int(5, 30);
                 $coordsDateRunner = $coordsDate;
@@ -186,8 +187,8 @@ class AppFixtures extends Fixture
                     $manager->persist($coords);
                     $coordsDateRunner = $coordsDateRunner->modify('+' . $speed . ' seconds');
                 }
-                $coordsDate->modify("+1 day");
             }
+            $coordsDate = $coordsDate->modify("+1 day");
         }
         $manager->flush();
     }
