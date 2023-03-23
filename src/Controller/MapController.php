@@ -17,15 +17,18 @@ class MapController extends AbstractController
     {
         return $this->render('map/home.html.twig', [
             'run' =>  $runRepository->findLatest()[0],
-            'upcomingRuns' => $runRepository->findUpcomingRuns()
+            'upcomingRuns' => $runRepository->findUpcomingRuns(),
+            'pastRuns' => $runRepository->findPastRuns()
         ]);
     }
-
+    
     #[Route('/map/{id}', name: 'app_map_id')]
-    public function run(Run $run): Response
+    public function run(Run $run, RunRepository $runRepository): Response
     {
         return $this->render('map/index.html.twig', [
-            'run' => $run
+            'run' => $run,
+            'upcomingRuns' => $runRepository->findUpcomingRuns(),
+            'pastRuns' => $runRepository->findPastRuns()
         ]);
     }
 

@@ -18,9 +18,9 @@
                     {% if run.runDate|date() < "now"|date() and not run.finishedAt %}
                         <p>La course est en live.</p>
                     {% elseif run.runDate|date() >= "now"|date() %}
-                        <p>Commence le {{run.runDate|date("d M Y, à    H:i:s")}}</p>
+                        <p>Commence le {{run.runDate|date("d M Y, à H:i:s")}}</p>
                     {% elseif run.finishedAt %}
-                        <p>Faite le {{run.runDate|date("d M Y, à    H:i:s")}}</p>
+                        <p>Faite le {{run.runDate|date("d M Y, à H:i:s")}}</p>
                     {% endif %}
 				{% else %}
 					<p>Aucune course.</p>

@@ -4,8 +4,8 @@ namespace App\Controller\admin;
 
 use App\Entity\Run;
 use App\Form\RunType;
-use App\Entity\Runner;
 use App\Repository\RunRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,4 +114,15 @@ class AdminRunController extends AbstractController
 
         return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/finish/{id}', name: 'app_admin_run_finish', methods: ['POST'])]
+    public function finish(Run $run, EntityManagerInterface $manager): Response
+    {
+        $run->setFinishedAt(new \DateTimeImmutable());
+        $manager->persist($run);
+        $manager->flush();
+        return $this->redirectToRoute('app_map_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
 }
