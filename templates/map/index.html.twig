@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
 
 {% endblock %}
-{% block title %}Running maps{% endblock %}
+{% block title %}{{run.name}}{% endblock %}
 
 {% block body %}
     <section class="header">
@@ -16,6 +16,13 @@
     <h2>Course en cours</h2>
     <section class="activeRun">
         <div id="map"></div>
+        <div>
+            {% if run.finishedAt %}
+                <input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
+            {% endif %}
+            <p>Debut de course : {{run.runDate|date('Y-m-d H:i:s')}}</p>
+            <p>Fin de course : {{run.finishedAt ? run.finishedAt|date('Y-m-d H:i:s') : "la course n'est pas terminee."}}</p>
+        </div>
         <div class="activeRun__infos">
             <h3>{{run.name}}</h3>
             <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>

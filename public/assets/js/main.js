@@ -1,116 +1,101 @@
-window.addEventListener('DOMContentLoaded', async () => {
-    await App.init();
-});
-
-const Run = {
-    init: async (...run) => {
-        Object.entries(run[0]).forEach((k) => {
-            Run[k[0]] = k[1];
-        });
-        await WS.init(Run.id);
-        await App.loadKMLTrack(Run.map);
-        // TODO: ADMIN setView Global
-        App.map.fitBounds(App.bounds);
-    }
-}
-
-const WS = {
-    init: async (run_id, port = 3001) => {
-        WS.id = run_id;
-        WS.server = new WebSocket(`ws://localhost:${port}`);
-        WS.server.addEventListener("open", WS.onOpen);
-        WS.server.addEventListener("message", WS.onMessage);
-    },
-    onOpen: async (e) => {
-        WS.send({ run_id: WS.id, is_admin: true, function: "connect" });
-        // WS.send({ run_id: WS.id, runner_id: 0, function: "connect" });
-        // WS.send({ run_id: WS.id, runner_id: 0, function: "coords", coords: [1, 5] });
-        const f = await fetch(`/coords/${WS.id}/${(new Date().getTime() / 1000).toFixed(0)}`);
-        const c = await f.json();
-        console.log(c);
-        await App.loadMarkers(c);
-        // ! IF IS RUNNER THIS THING UNDER SHOULD BE DISABLED
-        let F = setInterval(async() => {
-            const f = await fetch(`/coords/${WS.id}/${(new Date().getTime() / 1000).toFixed(0)}`);
-            const c = await f.json();
-            console.log(c);
-            await App.updateMarkers(c);
-        }, 5000)
-    },
-    // ! IF IS RUNNER THIS FUNC SHOULD BE DISABLED
-    onMessage: async (e) => {
-        console.log(JSON.parse(e.data));
-        if(e.data.coords) {
-            App.updateMarkers([e.data]);
+(function(){
+    window.addEventListener('DOMContentLoaded', async () => {
+        await App.init(Run);
+    });
+    
+    const App = {
+        MAX_ZOOM: 18, 
+        MIN_ZOOM: 5,
+        MARKER_BOX_SIZE: 38,
+        TRACK_STYLE: { opacity: 1, weight: 13, color: "#ff4f64" },
+        MARKERS: [],
+        init: async (run) => {
+            App.run = run;
+            App.map = L.map('map', { 
+                preferCanvas: true, 
+                minZoom: App.MIN_ZOOM,
+                maxZoom: App.MAX_ZOOM
+            });
+            if(App.run.finished_at) {
+                await RunHistory.init();
+            } else {
+                await WS.init();
+            }
+            await App.loadKMLTrack(run.map);
+            App.map.fitBounds(App.bounds);
+            App.tileLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            App.map.addLayer(App.tileLayer);
+        },
+        setView: async (coords) => {
+            App.map.setView(coords, App.MAX_ZOOM);
+        },
+        loadKMLTrack: async (path = "default.kml") => {
+            const KML = await Utility.fetch_kml(path);
+            const Track = new L.KML(KML);
+            Track.setStyle(App.TRACK_STYLE);
+            App.map.addLayer(Track);
+            App.bounds = Track.getBounds();
+        },
+        initMarkers: async (runners) => {
+            // ! In o you have runner info and coords info
+            runners.forEach(o => {
+                App.MARKERS[o.runner.id] = new RunnerMarker(o);
+            });
         }
-    },
-    send: (message) => {
-        console.log(message);
-        WS.server.send(JSON.stringify(message));
     }
-}
-
-const CalcDistance = function (lat1, lon1, lat2, lon2) {
-    function toRad(Value) 
-    {
-        return Value * Math.PI / 180;
+    
+    const RunHistory = {
+        init: async () => {
+            RunHistory.rangeInput = document.querySelector('.time-choice');
+            if(!RunHistory.rangeInput) return;
+            RunHistory.rangeInput.value = 0;
+            RunHistory.timeout = null;
+            RunHistory.rangeInput.addEventListener('input', RunHistory.updateTimestamp);
+            App.initMarkers(await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0)));
+        },
+        updateTimestamp: (evt) => {
+            if(!RunHistory.rangeInput) return;
+            clearTimeout(RunHistory.timeout);
+            // ? fetch only half a second after selecting
+            RunHistory.timeout = setTimeout(async () => {
+                const Runners = await Utility.fetch_run(RunHistory.rangeInput.value);
+                Runners.forEach(o => {
+                    App.MARKERS[o.runner.id].update(o.coords, 20);
+                });
+            }, 500);
+        }
     }
-    var R = 6371; // km
-    var dLat = toRad(lat2-lat1);
-    var dLon = toRad(lon2-lon1);
-    var lat1 = toRad(lat1);
-    var lat2 = toRad(lat2);
-
-    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    var d = R * c;
-    return d;
-}
-
-const App = {
-    MAX_ZOOM: 18, 
-    MIN_ZOOM: 5,
-    MARKER_BOX_SIZE: 38,
-    TRACK_STYLE: { opacity: 1, weight: 13, color: "#ff4f64" },
-    MARKER_MANAGER: null,
-    IS_ADMIN: false,
-    init: async () => {
-        App.map = L.map('map', { 
-            preferCanvas: true, 
-            minZoom: App.MIN_ZOOM,
-            maxZoom: App.MAX_ZOOM
-        });
-        App.tileLayer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        App.map.addLayer(App.tileLayer);
-    },
-    setView: async (coords = [App.bounds._northEast.lat, App.bounds._northEast.lng]) => {
-        App.map.setView(coords, App.MAX_ZOOM);
-    },
-    loadKMLTrack: async (path = "default.kml") => {
-        await fetch(`/assets/map/${path}`).then(res => res.text()).then(kmltext => {
-            parser = new DOMParser();
-            kml = parser.parseFromString(kmltext, "text/xml");
-
-            const track = new L.KML(kml);
-            track.setStyle(App.TRACK_STYLE);
-            App.map.addLayer(track);
-
-            App.bounds = track.getBounds();
-        });
-    },
-    loadMarkers: async (runners) => {
-        App.MARKER_MANAGER = new App.UserMarkerManager(runners);
-    },
-    updateMarkers: async (runners) => {
-        runners.forEach(runner => {
-            App.UserMarkerManager.MarkerCollection[runner.runner.id].update(runner);
-        });
-    },
-    UserMarker: class {
-        constructor (runner) {
-            this.marker = L.icon({
-                iconUrl: `/assets/users/${runner.runner.picture}` ?? "/assets/users/default.png",
+    
+    const WS = {
+        init: async (port = 3001) => {
+            WS.id = App.run.id;
+            console.log("Connected to WS");
+            WS.server = new WebSocket(`ws://localhost:${port}`);
+            WS.server.addEventListener("open", WS.onOpen);
+            WS.server.addEventListener("message", WS.onMessage);
+        },
+        onOpen: async (e) => {
+            App.initMarkers(await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0)));
+            WS.send({ run_id: WS.id, function: "connect" }); // WATCHER
+        },
+        onMessage: async (e) => {
+            const data = JSON.parse(e.data);
+            console.log(data);
+            if(data.coords) {
+                App.MARKERS[data.runner].update(data.coords);
+            }
+        },
+        send: (message) => {
+            WS.server.send(JSON.stringify(message));
+        }
+    }
+    
+    const RunnerMarker = class {
+        constructor (o) {
+            this.runner = o.runner;
+            this.coords = o.coords;
+            this.icon = L.icon({
+                iconUrl: `/assets/users/${this.runner.picture}` ?? "/assets/users/default.png",
                 iconSize: [App.MARKER_BOX_SIZE, App.MARKER_BOX_SIZE],
                 iconAnchor: [App.MARKER_BOX_SIZE/2, App.MARKER_BOX_SIZE],
                 popupAnchor: [0, -App.MARKER_BOX_SIZE - 8],
@@ -178,4 +163,4 @@ const App = {
             return c;
         }
     }
-}
+})()

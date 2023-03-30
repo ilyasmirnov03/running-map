@@ -10,21 +10,9 @@
 {% endblock %}
 
 {% block body %}
-
-	<a href="{{ path('app_runner_profile', {'id': user.id}) }}" class="p-button center">Voir mon profil</a>
-	{% for run in runs %}
-		<div class="runs">
-			<h3>Course : {{run.name}}</h3>
-			{# if requested to join #}
-			{% if run in requests %}
-				<p class="progress">demande en cours</p>
-				{# if request accepted #}
-			{% elseif user in run.getRunners %}
-				<p class="accepted">Participation accepte</p>
-
 	<a href="{{ path('app_runner_profile', {'id': user.id}) }}">Voir mon profil</a>
-	{% for run in runs %}
-		<div>
+	<div>
+        {% for run in runs %}
 			<p>{{run.name}}</p>
 			{# if requested to join #}
 			{% if run in requests %}
@@ -32,8 +20,7 @@
 				{# if request accepted #}
 			{% elseif user in run.getRunners %}
 				<p>Participation accepte</p>
-
-				{# if none above then able to request to participate #}
+			{# if none above then able to request to participate #}
 			{% else %}
 				<a class="request" href="{{path('app_runner_participate', {'id': run.id})}}">participer</a>
 			{% endif %}
@@ -41,7 +28,8 @@
 		{% else %}
 			<p>Aucune course est disponible en ce moment.</p>
 		{% endfor %}
-		<div class="nav">
+	</div>
+	<div class="nav">
             <ul>
                 <li class="nav__list ">
                     <a href="/map/" >
@@ -68,5 +56,4 @@
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
         	<script src="{{ asset("assets/js/navbar.js") }}"></script>
 		{% endblock %}
-	{% endfor %}
 {% endblock %}
