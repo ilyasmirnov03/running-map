@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/profile.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
+{% endblock %}
+{% block title %}{{run.name}}{% endblock %}
+
+{% block body %}
+    {% block map %}
+        {% include 'map/index.html.twig' %}
+    {% endblock %}
+{% endblock %}

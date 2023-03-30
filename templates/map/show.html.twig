@@ -15,9 +15,11 @@
             {% if run.finishedAt %}
                 <input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
             {% endif %}
-            <p>Debut de course : {{run.runDate|date('Y-m-d H:i:s')}}</p>
-            <p>Fin de course : {{run.finishedAt ? run.finishedAt|date('Y-m-d H:i:s') : "la course n'est pas terminee."}}</p>
-            <a href="#stats" class"goStats" >Voir les participants</a>
+            <div>
+                <p>Debut de course : {{run.runDate|date('Y-m-d H:i:s')}}</p>
+                <p>Fin de course : {{run.finishedAt ? run.finishedAt|date('Y-m-d H:i:s') : "la course n'est pas terminee."}}</p>
+            </div>
+            <span><a href="#stats" class"goStatsBtn" >Voir les participants</a></span>
         </div>
         <div class"partButton">
             

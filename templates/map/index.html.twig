@@ -6,17 +6,22 @@
 <link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
 
 {% endblock %}
-{% block title %}Running maps{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
     <section class="header">
         <a href=""><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
-        <a href=""><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
-        {# <a href=""><img src="" alt=""></a> #}
+        <a href="/runner/"><div class="profile"><i class="fa-solid fa-user"></i><p></p></div></a>
     </section>
     <h2>Course en cours</h2>
     <form class="activeRun" method="POST">
         <a id="map" href="/map/{{run.id}}"></a>
+        <div>
+            {% if run.finishedAt %}
+                <input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
+            {% endif %}
+        </div>
+
         <div class="activeRun__infos">
             <h3>{{run.name}}</h3>
             <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
@@ -33,8 +38,8 @@
             <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
         </div>
         <div class="allRuns__buttons">
-            <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
-            <a href="" class="s-button" style="font-size:24px; margin-top:18px;">+ d'infos</a>
+            {# <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a> #}
+            <a href="" class="s-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
         </div>     
     </section>
     <div class="nav">
@@ -52,7 +57,7 @@
                     </a>
                 </li>
                 <li class="nav__list">
-                    <a href="#">
+                    <a href="/runner/">
                         <span class="nav__list--icon"><i class="fa-solid fa-user"></i></span>
                         <span class="nav__list--text">Profil</span>
                     </a>
@@ -63,12 +68,11 @@
     
     {% block javascripts %}
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
-			<script src="{{ asset("assets/js/navbar.js") }}"></script>
+		    <script src="{{ asset("assets/js/navbar.js") }}"></script>
             <script>
-                window.addEventListener('DOMContentLoaded', async () => {
-                    await Run.init( {{ { 'id': run.id, 'name': run.name, 'created_at': run.createdAt,
-                    'map': run.map, 'date': run.runDate }|json_encode()|raw }} );
-            });
+                const Run = {
+                    id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
+                };
             </script>
     {% endblock %}
 {% endblock %}

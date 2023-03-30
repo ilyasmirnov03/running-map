@@ -16,7 +16,7 @@ class MapController extends AbstractController
     #[Route('/', name: 'app_map_index')]
     public function index(RunRepository $runRepository): Response
     {
-        return $this->render('map/index.html.twig', [
+        return $this->render('map/home.html.twig', [
             'run' =>  $runRepository->findLatest()[0]
         ]);
     }

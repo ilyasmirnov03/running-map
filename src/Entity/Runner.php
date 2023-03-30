@@ -35,7 +35,7 @@ class Runner implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'Runner', targetEntity: Coordinates::class)]
     private Collection $coords;
 
-    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'Runner')]
+    #[ORM\ManyToMany(targetEntity: Run::class, mappedBy: 'runner')]
     private Collection $runs;
 
     #[ORM\OneToMany(mappedBy: 'runner', targetEntity: RunJoinRequest::class, orphanRemoval: true)]
