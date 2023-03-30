@@ -16,7 +16,14 @@ user-marker */
 /* THIS IS USER TARGET MARKER */
 .leaflet-marker-icon.runner-marker {
     transition: .51s cubic-bezier(.32, .07, .09, .85);
+    border: 2px solid #fff;
+    box-shadow: 0 0 12px #1a1a1a2f;
 }
+
+.leaflet-marker-icon.runner-marker:hover {
+    border-color: #ff5757;
+}
+
 
 .leaflet-container a.leaflet-popup-close-button:hover,
 .leaflet-container a.leaflet-popup-close-button:focus {
