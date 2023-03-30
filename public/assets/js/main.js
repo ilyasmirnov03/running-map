@@ -1,6 +1,6 @@
 (function(){
     window.addEventListener('DOMContentLoaded', async () => {
-        await App.init(Run);
+        await App.init(Run); // TWIG IMPORT
     });
     
     const App = {
@@ -119,7 +119,7 @@
             this.object.setLatLng([coords.latitude, coords.longitude]);
         }
         setPopup() {
-            this.object._popup.setContent(`Coureur : ${this.runner.login ?? "Mr.Cheater"} <br> Vitesse coureur : ${this.speed ?? 0} km/h`)
+            this.object._popup.setContent(`Coureur : ${this.runner.login ?? "Mr.Cheater"} <br> Vitesse coureur : ${isNaN(this.speed) || this.speed == null ? 0 : this.speed} km/h`)
         }
         update (coords, speed = null) {
             console.log(coords);

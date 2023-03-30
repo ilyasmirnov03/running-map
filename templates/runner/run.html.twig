@@ -11,6 +11,7 @@
     <script defer>
         const UserId = {{app.user.id}};
         const RunId = {{run.id}};
+        const RunDate = {{run.runDate|date('U')}};
     </script>
     <script src="{{ asset('/assets/js/runner.js') }}" defer></script>
 {% endblock %}

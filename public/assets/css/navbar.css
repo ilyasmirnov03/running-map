@@ -8,7 +8,7 @@
 }
 
 .nav {
-  width: 100vw;
+  margin-top:5rem;
   height: 3.75rem;
   position: relative;
   display: flex;

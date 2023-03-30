@@ -1,71 +1,141 @@
 {% extends 'map.html.twig' %}
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset("assets/css/index.css") }}">
-<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
-<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
-<link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
-
+	<link rel="stylesheet" href="{{ asset("assets/css/index.css") }}">
+	<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+	<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+	<link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
+	<link rel="stylesheet" href="{{ asset("assets/css/inputRange.css") }}">
 {% endblock %}
-{% block title %}{{run.name}}{% endblock %}
+
+{% block title %}
+	{{run.name}}
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
+	<script src="{{ asset("assets/js/navbar.js") }}"></script>
+    <script>
+        const Run = {
+            id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
+        };
+    </script>
+{% endblock %}
 
 {% block body %}
     <section class="header">
         <a href=""><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
-        <a href="/runner/"><div class="profile"><i class="fa-solid fa-user"></i><p></p></div></a>
+        <a href=""><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
     </section>
     <h2>Course en cours</h2>
     <section class="activeRun">
-        <div id="map"></div>
-        <div>
-            {% if run.finishedAt %}
-                <input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
-            {% endif %}
-            <p>Debut de course : {{run.runDate|date('Y-m-d H:i:s')}}</p>
-            <p>Fin de course : {{run.finishedAt ? run.finishedAt|date('Y-m-d H:i:s') : "la course n'est pas terminee."}}</p>
-        </div>
-        <div class="activeRun__infos">
-            <h3>{{run.name}}</h3>
-            <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
-        </div>
-        <a href="/map/{{run.id}}" class="p-button" style="font-size:28px; margin-top:18px;">Voir la course</a>
-    </form>
-    <h2>Prochaines courses</h2>
-    <section class="allRuns">
-        <div class="maps">
-            <div class="map active"></div>
-        </div>
-        <div class="activeRun__infos">
-            <h3>{{run.name}}</h3>
-            <p>{{run.runDate|date('d-m-Y H:i:s')}}</p>
-        </div>
-        <div class="allRuns__buttons">
-            {# <a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a> #}
-            <a href="" class="s-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
-        </div>     
-    </section>
-    <div class="nav">
-            <ul>
-                <li class="nav__list ">
-                    <a href="/map/{{run.id}}" >
-                        <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
-                        <span class="nav__list--text">Courses</span>
-                    </a>
-                </li>
-                <li class="nav__list active">
-                    <a href="{{ path('app_map_index') }}">
-                        <span class="nav__list--icon"><i class="fa-solid fa-house"></i></span>
-                        <span class="nav__list--text">Accueil</span>
-                    </a>
-                </li>
-                <li class="nav__list">
-                    <a href="/runner/">
-                        <span class="nav__list--icon"><i class="fa-solid fa-user"></i></span>
-                        <span class="nav__list--text">Profil</span>
-                    </a>
-                </li>
-                <div class="indicator"></div>
-            </ul>	
-	    </div>
+	<div>
+		{% if not run.finishedAt and run.runDate|date() <= "now"|date() %}
+			<h2>Course
+				{{run.name}}<span class="run__live">LIVE</span>
+			</h2>
+		{% elseif not run.finishedAt and run.runDate|date() > "now"|date() %}
+			<h2>Course
+				{{run.name}}<span class="run__future">A VENIR</span>
+			</h2>
+		{% else %}
+			<h2>Course
+				{{run.name}}<span class="run__finished">COMPLETE</span>
+			</h2>
+		{% endif %}
+	</div>
+	<div id="map"></div>
+	{% if run.finishedAt %}
+		<div class="time-choice__container">
+			<input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
+		</div>
+	{% endif %}
+	<div class="activeRun__infos">
+		{% if is_granted('ROLE_ADMIN') and not run.finishedAt and run.runDate|date() < "now"|date() %}
+			<form action="{{path("app_admin_run_finish", {"id": run.id})}}" method="POST" style="text-align:center">
+				<button type="submit" class="p-button" style="font-size:24px; margin-top:18px;">Terminer la course</button>
+			</form>
+		{% endif %}
+		<h3>{{run.name}}</h3>
+		<p>Debut de course : le
+			{{run.runDate|date("d M, Y \à H:i:s")}}</p>
+		<p>Fin de course :
+			{{run.finishedAt ? run.finishedAt|date("d M, Y \à H:i:s") : "la course n'est pas terminee."}}</p>
+	</div>
+</section>
+<section class="upcomingRuns">
+	<h2>Courses a venir</h2>
+	<div class="runs__container">
+		{% for run in upcomingRuns %}
+			<div class="run">
+				<div class="maps">
+					<div class="map active"></div>
+				</div>
+				<div class="activeRun__infos">
+					<h3>{{run.name}}</h3>
+					<p>{{run.runDate|date("d M, Y \à H:i:s")}}</p>
+				</div>
+				<div class="allRuns__buttons">
+					{% if is_granted('ROLE_RUNNER') %}
+						<a href="" class="p-button" style="font-size:24px; margin-top:18px;">S'inscrire</a>
+					{% endif %}
+					<a href="{{path("app_map_id", {"id": run.id})}}" class="s-button" style="font-size:24px; margin-top:18px;">+ d'infos</a>
+				</div>
+			</div>
+		{% else %}
+			<p>Aucune course n'est programmee.</p>
+		{% endfor %}
+	</div>
+</section>
+<section class="pastRuns">
+	<h2>Courses passees</h2>
+	<div class="runs__container">
+		{% for run in pastRuns %}
+			<div class="run">
+				<div class="maps">
+					<div class="map active"></div>
+				</div>
+				<div class="activeRun__infos">
+					<h3>{{run.name}}</h3>
+					<p>{{run.runDate|date("d M, Y \à H:i:s")}}</p>
+				</div>
+				<div class="allRuns__buttons">
+					<a href="{{path("app_map_id", {"id": run.id})}}" class="s-button" style="font-size:24px; margin-top:18px;">+ d'infos</a>
+				</div>
+			</div>
+		{% else %}
+			<p>Aucune course n'est programmee.</p>
+		{% endfor %}
+	</div>
+</section>
+<div class="nav">
+	<ul>
+		<li class="nav__list ">
+			<a href="">
+				<span class="nav__list--icon">
+					<i class="fa-solid fa-person-running"></i>
+				</span>
+				<span class="nav__list--text">Courses</span>
+			</a>
+		</li>
+		<li class="nav__list active">
+			<a href="{{ path('app_map_index') }}">
+				<span class="nav__list--icon">
+					<i class="fa-solid fa-house"></i>
+				</span>
+				<span class="nav__list--text">Accueil</span>
+			</a>
+		</li>
+		<li class="nav__list">
+			<a href="{{path("app_login")}}">
+				<span class="nav__list--icon">
+					<i class="fa-solid fa-user"></i>
+				</span>
+				<span class="nav__list--text">Profil</span>
+			</a>
+		</li>
+		<div class="indicator"></div>
+	</ul>
+</div>
     
     {% block javascripts %}
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
