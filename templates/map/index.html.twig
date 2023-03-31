@@ -37,7 +37,13 @@
 			<span class="run__finished">COMPLETE</span>
 		{% endif %}
 	</div>
-	<div id="map"></div>
+	<div class="croix activeCross">
+        <span></span>
+    </div>
+	<div class="primaryMap">
+		<div id="map" ></div>
+	</div>
+	
 	{% if run.finishedAt %}
 		<div class="time-choice__container">
 			<input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
@@ -62,9 +68,9 @@
 	<div class="runs__container">
 		{% for run in upcomingRuns %}
 			<div class="run">
-				<div class="maps">
+				{# <div class="maps">
 					<div class="map active"></div>
-				</div>
+				</div> #}
 				<div class="activeRun__infos">
 					<h3>{{run.name}}</h3>
 					<p>{{run.runDate|date("d M, Y \à H:i:s")}}</p>
@@ -86,9 +92,9 @@
 	<div class="runs__container">
 		{% for run in pastRuns %}
 			<div class="run">
-				<div class="maps">
+				{# <div class="maps">
 					<div class="map active"></div>
-				</div>
+				</div> #}
 				<div class="activeRun__infos">
 					<h3>{{run.name}}</h3>
 					<p>{{run.runDate|date("d M, Y \à H:i:s")}}</p>
@@ -135,6 +141,7 @@
     {% block javascripts %}
 	<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
 	<script src="{{ asset("assets/js/navbar.js") }}"></script>
+	<script src="{{ asset("assets/js/openMap.js") }}"></script>
     <script>
         const Run = {
             id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
