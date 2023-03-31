@@ -11,36 +11,30 @@
 	{{run.name}}
 {% endblock %}
 
-{% block javascripts %}
-	<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
-	<script src="{{ asset("assets/js/navbar.js") }}"></script>
-    <script>
-        const Run = {
-            id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
-        };
-    </script>
-{% endblock %}
+
 
 {% block body %}
     <section class="header">
         <a href=""><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
-        <a href=""><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
+        <a href="{{path("app_runner")}}"><div class="profile"><i class="fa-solid fa-user"></i><p>Connexion</p></div></a>
     </section>
-    <h2>Course en cours</h2>
     <section class="activeRun">
-	<div>
+	<div class="activeRun__name">
 		{% if not run.finishedAt and run.runDate|date() <= "now"|date() %}
 			<h2>Course
-				{{run.name}}<span class="run__live">LIVE</span>
+				{{run.name}}
 			</h2>
+			<span class="run__live">LIVE</span>
 		{% elseif not run.finishedAt and run.runDate|date() > "now"|date() %}
 			<h2>Course
-				{{run.name}}<span class="run__future">A VENIR</span>
+				{{run.name}}
 			</h2>
+			<span class="run__future">A VENIR</span>
 		{% else %}
 			<h2>Course
-				{{run.name}}<span class="run__finished">COMPLETE</span>
+				{{run.name}}
 			</h2>
+			<span class="run__finished">COMPLETE</span>
 		{% endif %}
 	</div>
 	<div id="map"></div>
@@ -61,6 +55,7 @@
 		<p>Fin de course :
 			{{run.finishedAt ? run.finishedAt|date("d M, Y \à H:i:s") : "la course n'est pas terminee."}}</p>
 	</div>
+	<a href="/map/{{run.id}}" class="p-button" style="font-size:28px; margin-top:18px;">Voir la course</a>
 </section>
 <section class="upcomingRuns">
 	<h2>Courses a venir</h2>
@@ -82,12 +77,12 @@
 				</div>
 			</div>
 		{% else %}
-			<p>Aucune course n'est programmee.</p>
+			<p>Aucune course n'est programmée.</p>
 		{% endfor %}
 	</div>
 </section>
 <section class="pastRuns">
-	<h2>Courses passees</h2>
+	<h2>Courses passées</h2>
 	<div class="runs__container">
 		{% for run in pastRuns %}
 			<div class="run">
@@ -110,7 +105,7 @@
 <div class="nav">
 	<ul>
 		<li class="nav__list ">
-			<a href="">
+			<a href="/map/{{run.id}}">
 				<span class="nav__list--icon">
 					<i class="fa-solid fa-person-running"></i>
 				</span>
@@ -126,7 +121,7 @@
 			</a>
 		</li>
 		<li class="nav__list">
-			<a href="{{path("app_login")}}">
+			<a href="{{path("app_runner")}}">
 				<span class="nav__list--icon">
 					<i class="fa-solid fa-user"></i>
 				</span>
@@ -138,12 +133,12 @@
 </div>
     
     {% block javascripts %}
-			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
-		    <script src="{{ asset("assets/js/navbar.js") }}"></script>
-            <script>
-                const Run = {
-                    id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
-                };
-            </script>
-    {% endblock %}
+	<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
+	<script src="{{ asset("assets/js/navbar.js") }}"></script>
+    <script>
+        const Run = {
+            id: {{run.id}}, name: "{{run.name}}", created_at: {{run.createdAt|date('U')}}, map: "{{run.map}}", date: {{run.runDate|date('U')}}, finished_at: {{run.finishedAt ? run.finishedAt|date('U') : "null"}}
+        };
+    </script>
+{% endblock %}
 {% endblock %}

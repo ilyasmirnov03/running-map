@@ -10,16 +10,17 @@
 {% endblock %}
 
 {% block body %}
-	<a href="{{ path('app_runner_profile', {'id': user.id}) }}">Voir mon profil</a>
-	<div>
+	<a href="{{ path('app_runner_profile', {'id': user.id}) }}" class="p-button center">Voir mon profil</a>
+	
         {% for run in runs %}
-			<p>{{run.name}}</p>
+		<div class="runs">
+			<h3>Course : {{run.name}}</h3>
 			{# if requested to join #}
 			{% if run in requests %}
-				<p>demande en cours</p>
+				<p class="progress">demande en cours</p>
 				{# if request accepted #}
 			{% elseif user in run.getRunners %}
-				<p>Participation accepte</p>
+				<p class="accepted">Participation accepte</p>
 			{# if none above then able to request to participate #}
 			{% else %}
 				<a class="request" href="{{path('app_runner_participate', {'id': run.id})}}">participer</a>

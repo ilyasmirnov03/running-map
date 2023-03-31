@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/profile.css") }}">
+{% endblock %}
 {% block title %}Running -
 	{{app.user.login}}
 {% endblock %}
