@@ -53,6 +53,9 @@
                 <div class="indicator"></div>
             </ul>	
 	    </div>
+		<div class="logout">
+            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Me déconnecter</a>
+        </div>
 		{% block javascripts %}
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
         	<script src="{{ asset("assets/js/navbar.js") }}"></script>

@@ -85,10 +85,28 @@
                     </a>
                 </li>
                 <li class="nav__list">
-                    <a href="#">
-                        <span class="nav__list--icon"><i class="fa-solid fa-user"></i></span>
-                        <span class="nav__list--text">Profil</span>
-                    </a>
+                    {% if is_granted('ROLE_RUNNER') %}
+                        <a href="{{path("app_runner")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% elseif is_granted('ROLE_ADMIN') %}
+                        <a href="{{path("app_admin_index")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% else %}
+                        <a href="{{path("app_login")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% endif %}
                 </li>
                 <div class="indicator"></div>
             </ul>	

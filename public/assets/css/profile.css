@@ -90,7 +90,6 @@ body > a {
 }
 
 .profile__modifier--div {
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -102,4 +101,12 @@ body > a {
   width: 114px;
   height: 114px;
   border-radius: 100%;
+}
+.logout {
+  color: #3a859a;
+  text-align: center;
+}
+.logout a {
+  font-weight: bold;
+  color: #3a859a;
 }
