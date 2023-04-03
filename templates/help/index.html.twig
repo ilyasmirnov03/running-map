@@ -6,7 +6,16 @@
 <div class="main__help__center">
     <h1 class="help__center__title">Centre d'aide</h1>
     <details class="help__block__wrapper">
-        <summary>Créer son propre parcours</summary>
+        <summary>créer son propre parcours</summary>
+        <div class="help__content__wrapper">
+            <div class="help__content__step">
+                <picture class="help__picture">
+                    <source media="(max-width: 700px)" srcset="{{ asset('/assets/images/tutorial/home--mobile.png') }}" />
+                    <source media="(min-width: 800px)" srcset="{{ asset('/assets/images/tutorial/home.png') }}" />
+                    <img class="help__image" src="{{ asset('/assets/images/tutorial/home--mobile.png') }}" alt="Page d'accueil de MyMaps" />
+                </picture>
+            </div>
+        </div>
     </details>
 </div>
 {% endblock %}
