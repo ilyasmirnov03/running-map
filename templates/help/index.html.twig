@@ -1,21 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HelpController!{% endblock %}
+{% block title %}Running-map | Aide{% endblock %}
 {% block body %}
 <link rel="stylesheet" href="{{ asset('/assets/css/help.css') }}"/>
 <div class="main__help__center">
-    <h1 class="help__center__title">Centre d'aide</h1>
-    <details class="help__block__wrapper">
-        <summary>créer son propre parcours</summary>
-        <div class="help__content__wrapper">
-            <div class="help__content__step">
-                <picture class="help__picture">
-                    <source media="(max-width: 700px)" srcset="{{ asset('/assets/images/tutorial/home--mobile.png') }}" />
-                    <source media="(min-width: 800px)" srcset="{{ asset('/assets/images/tutorial/home.png') }}" />
-                    <img class="help__image" src="{{ asset('/assets/images/tutorial/home--mobile.png') }}" alt="Page d'accueil de MyMaps" />
-                </picture>
-            </div>
-        </div>
-    </details>
+    <h1 class="help__center__title">#1 - Comment créer son propre parcours?</h1>
+    <ul class="help__center__summary">
+        <li><a href="#helpstep1">Connexion à "MyMaps"</a></li>
+        <li><a href="#helpstep2">Dessiner son parcours</a></li>
+        <li><a href="#helpstep3">Menu d'exportation</a></li>
+        <li><a href="#helpstep4">Exporter le parcours</a></li>
+    </ul>
+
+    <section class="step" id="helpstep1">
+        <h2 class="step__title">Étape 1: Ouvrir Google Maps</h2>
+        <p class="step__description">
+          Pour commencer, ouvrez votre navigateur web et rendez-vous sur le site de Google Maps.
+          (<a target="_blank" href="https://www.google.com/maps/d/u/0/home?hl=fr">ou cliquez ici</a>)
+        </p>
+        <picture class="step__picture">
+            <source media="(max-width: 700px)" srcset="{{ asset('/assets/images/tutorial/home--mobile.png') }}" />
+            <source media="(min-width: 800px)" srcset="{{ asset('/assets/images/tutorial/home.png') }}" />
+            <img class="step__image" src="{{ asset('/assets/images/tutorial/home--mobile.png') }}" alt="Page d'accueil de MyMaps" />
+        </picture>
+      </section>
+
+      <section class="step" id="helpstep2">
+        <h2 class="step__title">Étape 2: Cliquer sur le bouton « créer une carte » ou « + »</h2>
+        <p class="step__description">
+          Ensuite, placez vous à l'endroit où vous voulez créer votre course et commencez à tracer le parcours
+        </p>
+        <picture class="step__picture">
+            <source media="(max-width: 700px)" srcset="{{ asset('/assets/images/tutorial/create-line--mobile.png') }}" />
+            <source media="(min-width: 800px)" srcset="{{ asset('/assets/images/tutorial/create-line.png') }}" />
+            <img class="step__image" src="{{ asset('/assets/images/tutorial/create-line--mobile.png') }}" alt="Vue d'une carte vierge sur Google Maps" />
+        </picture>
+      </section>
+
+      <section class="step" id="helpstep3">
+        <h2 class="step__title">Étape 3: Finalisez votre parcours</h2>
+        <p class="step__description">
+          Les points d'arrivé et de départ peuvent êtres les mêmes ou non
+        </p>
+        <picture class="step__picture">
+            <source media="(max-width: 700px)" srcset="{{ asset('/assets/images/tutorial/final-line--mobile.png') }}" />
+            <source media="(min-width: 800px)" srcset="{{ asset('/assets/images/tutorial/final-line.png') }}" />
+            <img class="step__image" src="{{ asset('/assets/images/tutorial/final-line--mobile.png') }}" alt="Vue d'une carte vierge avec tracé de parcours sur Google Maps" />
+        </picture>
+      </section>
+
+      <section class="step" id="helpstep4">
+        <h2 class="step__title">Étape 4: Ouvrez le menu d'exportation</h2>
+        <p class="step__description">
+            Puis, cliquez sur les trois petits points (sur mobile cliquez sur « Légende »)
+        </p>
+        <picture class="step__picture">
+            <source media="(max-width: 700px)" srcset="{{ asset('/assets/images/tutorial/open-export--mobile.png') }}" />
+            <source media="(min-width: 800px)" srcset="{{ asset('/assets/images/tutorial/open-export.png') }}" />
+            <img class="step__image" src="{{ asset('/assets/images/tutorial/open-export--mobile.png') }}" alt="Menu d'exportation de MyMaps" />
+        </picture>
+      </section>
+
+      <section class="step" id="helpstep5">
+        <h2 class="step__title">Étape 5: Exportez votre parcours au format KML</h2>
+        <p class="step__description">
+          Une fois votre fichier KML téléchargé, retournez sur Running-map et téléversé le fichier
+        </p>
+        <picture class="step__picture">
+            <img class="step__image" src="{{ asset('/assets/images/tutorial/export.png') }}" alt="Exportation du parcours en KML" />
+        </picture>
+      </section>
 </div>
 {% endblock %}

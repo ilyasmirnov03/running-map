@@ -9,7 +9,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     font-size: 18px;
     color: var(--s-color);
     background-color: #eee;
@@ -23,56 +24,58 @@ html, body {
 
 .main__help__center {
     margin: 0 auto;
-    width: fit-content;
+    width: 75%;
+    display: grid;
+    gap: 2rem;
 }
 
 .help__center__title {
     display: block;
     margin-top: 6rem;
-    margin-bottom: 2rem;
-    text-align: center;
     font-size: 2rem;
 }
 
-.help__block__wrapper {
-    cursor: pointer;
-    background-color: #eee;
-    border: 3px solid #3a859a;
-    color: #3a859a;
-    user-select: none;
-    text-align: center;
-    padding: .6rem .8rem;
-    border-radius: 4px;
-}
-
-.help__block__wrapper summary {
-    list-style: none;
-    font-size: 1.6rem;
-    width: max-content;
-    line-height: 1;
-    color: #3a859a;
-}
-
-.help__block__wrapper summary::after {
-    content: "+";
-    display: inline-block;
-    margin: 0 8px 0 16px;
-    font-size: 1.6rem;
-    color: #3a859a;
-    border: 3px solid #3a859a;
-    width: 1.4rem;
-    height: 1.4rem;
-    line-height: 0.65;
-}
-
-.help__block__wrapper[open] summary::after {
-    content: "-";
-}
-
-.help__content__wrapper, .help__content__step {
-
-}
 .help__picture,
 .help__image {
-    max-width:  50%;
+    width: 50%;
+}
+
+.help__center__summary {
+    list-style: decimal;
+    margin-left: 2rem;
+}
+
+.help__center__summary li {
+    margin: .3rem 0;
+}
+
+
+.help__center__summary a {
+    color: var(--s-color);
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.help__center__summary a:hover {
+    text-decoration: underline;
+}
+
+.step {
+    margin-bottom: 40px;
+    scroll-margin-top: 40px;
+}
+
+.step__title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.step__description {
+    margin-bottom: 20px;
+}
+
+.step__image {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 20px;
 }
