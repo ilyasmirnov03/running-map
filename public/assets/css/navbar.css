@@ -8,7 +8,7 @@
 }
 
 .nav {
-  margin-top:5rem;
+  margin-top: 5rem;
   height: 3.75rem;
   position: relative;
   display: flex;
@@ -33,7 +33,7 @@
   list-style: none;
   width: 4.375rem;
   height: 4.375rem;
-  z-index: 1;
+  z-index: 99999;
 }
 .nav__list a {
   position: relative;

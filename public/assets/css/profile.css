@@ -1,0 +1,112 @@
+html {
+  width: 100vw;
+  scroll-behavior: smooth;
+}
+body {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body > a {
+  margin-top: 20px;
+}
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 30px;
+  width: 100vw;
+}
+.header img {
+  width: 40px;
+  height: auto;
+}
+.header__profile {
+  display: block;
+  text-align: center;
+  color: #3a859a;
+  text-decoration: none;
+}
+.header__profile i {
+  font-size: 30px;
+}
+.header__profile p {
+  font-size: 10px;
+  font-weight: bold;
+  text-decoration: none;
+}
+.runs {
+  display: flex;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.progress {
+  color: orange;
+  margin-left: 10px;
+}
+.accepted {
+  color: green;
+  margin-left: 10px;
+}
+.request {
+  color: #3a859a;
+  margin-left: 10px;
+}
+.profile {
+  margin-inline: 25px;
+}
+.profile__title {
+  text-align: center;
+  font-weight: 400;
+  margin-block: 35px;
+}
+.profile__title span {
+  color: #3a859a;
+  font-weight: bold;
+}
+.profile__lastRun {
+  margin-top: 15px;
+}
+.profile__lastRun--block {
+  margin-bottom: 10px;
+}
+.profile__lastRun--block span {
+  font-weight: bold;
+}
+
+.profile__modifier {
+  margin-bottom: 75px;
+}
+.profile__modifier h2 {
+  margin-bottom: 20px;
+}
+.modifier {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile__modifier--div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.profile__modifier--div a {
+  color: #3a859a;
+}
+.modifier img {
+  width: 114px;
+  height: 114px;
+  border-radius: 100%;
+}
+.logout {
+  color: #3a859a;
+  text-align: center;
+}
+.logout a {
+  font-weight: bold;
+  color: #3a859a;
+}

@@ -1,0 +1,142 @@
+{% extends 'map.html.twig' %}
+
+{% block title %}{{run.name}}{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/navbar.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/indexMap.css") }}">
+{% endblock %}
+{% block body %}
+    <div class="map">
+        <div id="map"></div>
+        <a href="{{ path('app_map_index') }}" class="logo"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" ></div></a>
+        <div class="map__date">
+            {% if run.finishedAt %}
+                <input class="time-choice" type="range" value="{{run.runDate|date('U')}}" min="{{run.runDate|date('U')}}" max="{{run.finishedAt|date('U')}}">
+            {% endif %}
+            <div>
+                <p>Debut de course : {{run.runDate|date('Y-m-d H:i:s')}}</p>
+                <p>Fin de course : {{run.finishedAt ? run.finishedAt|date('Y-m-d H:i:s') : "la course n'est pas terminee."}}</p>
+            </div>
+            <span><a href="#stats" class"goStatsBtn" >Voir les participants</a></span>
+        </div>
+        <div class"partButton">
+            
+        </div>
+    </div>
+    <div id="stats">
+        <h2>Participants :</h2>
+        <div class="participants">
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+            <div class="participant">
+                <img src="{{ asset("assets/images/partPP.svg") }}" alt="">
+                <p>Nom</p>
+            </div>
+        </div>
+    </div>
+    <div class="nav">
+            <ul>
+                <li class="nav__list active">
+                    <a href="#">
+                        <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
+                        <span class="nav__list--text">Courses</span>
+                    </a>
+                </li>
+                <li class="nav__list">
+                    <a href="{{ path('app_map_index') }}">
+                        <span class="nav__list--icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="nav__list--text">Accueil</span>
+                    </a>
+                </li>
+                <li class="nav__list">
+                    {% if is_granted('ROLE_RUNNER') %}
+                        <a href="{{path("app_runner")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% elseif is_granted('ROLE_ADMIN') %}
+                        <a href="{{path("app_admin_index")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% else %}
+                        <a href="{{path("app_login")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% endif %}
+                </li>
+                <div class="indicator"></div>
+            </ul>	
+	    </div>
+        {% block javascripts %}
+        <script src="{{ asset("assets/js/navbar.js") }}"></script>
+            <script>
+        const GetRunnersInfo = async (timestamp) => {
+            const f = await fetch(`/coords/{{ run.id }}/${timestamp}`);
+            const c = await f.json();
+            return c;
+        }
+        window.addEventListener('DOMContentLoaded', async () => {
+            //run data
+            await Run.init( {{ { 'id': run.id, 'name': run.name, 'created_at': run.createdAt,'map': run.map, 'date': run.runDate }|json_encode()|raw }} );
+            await App.loadMarkers(await GetRunnersInfo({{run.runDate|date('U')}}));
+            //run progress showcase with range slider
+            let timer;
+            let timestamp_input = document.querySelector('.time-choice');
+            if(!timestamp_input) return;
+            timestamp_input.value = 0;
+            timestamp_input.addEventListener('input', function()  {
+                clearTimeout(timer);
+                //fetch only half a second after selecting
+                timer = setTimeout( async () => {
+                    await App.updateMarkers(await GetRunnersInfo(this.value));
+                }, 500);
+            });
+        });
+    </script>
+       	{% endblock %}
+    
+{% endblock %}
