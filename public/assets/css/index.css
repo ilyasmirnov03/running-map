@@ -35,13 +35,29 @@
   text-decoration: none;
 }
 
+.activeRun__buttons {
+  display:flex;
+  gap:1rem;
+  margin:0 auto;
+}
+
+.endButton {
+  background-color: #ec2020 !important;
+}
+
 .activeRun,
 .upcomingRuns,
 .pastRuns {
+  padding:2rem calc(2rem + 10vw);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
 }
+
+.pastRuns {
+  padding-bottom:10rem;
+}
+
 .activeRun__name {
   margin-top: 20px;
   padding-bottom: 15px;
@@ -51,8 +67,6 @@
 .pastRuns h2 {
   margin-bottom: 15px;
   margin-top: 10px;
-  width: 80vw;
-  margin-left: 25px;
   font-size: 28px;
   font-weight: bold;
   white-space: nowrap;
@@ -63,7 +77,6 @@
   flex-direction: column;
   justify-content: flex-start;
   margin-bottom: 1rem;
-  width: 80vw;
 }
 
 .activeRun__infos h3 {
@@ -95,17 +108,12 @@
   background-color: #3a859a;
 }
 
-.pastRuns,
-.upcomingRuns {
-  padding: 3rem 0;
-}
-
 .runs__container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 1rem;
 }
+
 .map {
   height: 300px;
   width: 80vw;
