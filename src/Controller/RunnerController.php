@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -97,7 +96,7 @@ class RunnerController extends AbstractController
     }
 
     #[Route('/run/{id}', name: 'app_runner_run')]
-    public function run(Run $run, RunnerRepository $runnerRepository): Response
+    public function run(Run $run): Response
     {
         return $this->render('runner/run.html.twig', [
             'run' => $run

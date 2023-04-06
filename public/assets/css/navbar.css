@@ -8,9 +8,11 @@
 }
 
 .nav {
-  margin-top: 5rem;
   height: 3.75rem;
-  position: relative;
+  position: fixed;
+  bottom:0;
+  right:50%;
+  transform: translateX(50%);
   display: flex;
   justify-content: center;
   align-items: center;

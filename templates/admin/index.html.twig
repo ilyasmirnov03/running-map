@@ -14,7 +14,9 @@
 {% block body %}
 	
 	<header>
-		<a href="{{ path('app_map_index') }}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img"></a>
+		<a href="{{ path('app_map_index') }}">
+			<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img">
+		</a>
 		<div class="notifications">
 			<i class="fa-solid fa-bell pr-color notifications__icon"></i>
 			<span><p>{{requests|length}}</p></span>
@@ -76,7 +78,7 @@
 	<div class="nav">
             <ul>
                 <li class="nav__list">
-                    <a href="#">
+                    <a href="{{path('app_map_id')}}">
                         <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
                         <span class="nav__list--text">Courses</span>
                     </a>

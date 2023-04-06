@@ -8,7 +8,9 @@
 {% endblock %}
 {% block body %}
     <div class="adminHeader">
-		<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="">
+        <a href="{{path('app_map_index')}}">
+		    <img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="">
+        </a>
 		<a href="{{ path('app_admin_index') }}">Accueil</a>
 	</div>
     <h1>Gérer les courses</h1>
@@ -16,10 +18,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Map</th>
-                <th>Run_date</th>
-                <th></th>
+                <th>Nom</th>
+                <th>Carte</th>
+                <th>Date de debut</th>
+                <th>Date de fin</th>
             </tr>
         </thead>
         <tbody>
@@ -27,15 +29,16 @@
             <tr class="runnerProfile">
                 <td>{{ run.name }}</td>
                 <td>{{ run.map }}</td>
-                <td>{{ run.runDate ? run.runDate|date('H:i:s d-m-Y') : '' }}</td>
+                <td>{{ run.runDate ? run.runDate|date('d F, Y \à H:i:s') : '' }}</td>
+                <td>{{ run.finishedAt ? run.finishedAt|date('d F, Y \à H:i:s') : 'Course non terminée.' }}</td>
                 <td class="actions">
                     <a href="{{ path('app_admin_run_edit', {'id': run.id}) }}" class="mod-btn">Modifier</a>
-                    <a href="">{{ include('admin/run/_delete_form.html.twig') }}</a>
+                    {{ include('admin/run/_delete_form.html.twig') }}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Aucune course a été trouvée.</td>
             </tr>
         {% endfor %}
         </tbody>

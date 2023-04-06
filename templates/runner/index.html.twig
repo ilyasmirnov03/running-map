@@ -11,31 +11,35 @@
 
 {% block body %}
 	<a href="{{ path('app_runner_profile', {'id': user.id}) }}" class="p-button center">Voir mon profil</a>
-	
+	<section class="runs__container">
         {% for run in runs %}
 		<div class="runs">
 			<h3>Course : {{run.name}}</h3>
 			{# if requested to join #}
 			{% if run in requests %}
-				<p class="progress">demande en cours</p>
+				<p class="progress">Demande en cours</p>
 				{# if request accepted #}
 			{% elseif user in run.getRunners %}
-				<p class="accepted">Participation accepte</p>
+				<span>Commence le {{run.runDate|date("d M, Y \à H:i:s")}}</span>
+				<div class="runs__buttons">
+					<p class="accepted">Participation acceptée</p>
+					<a class="request" href="{{path('app_runner_run', {id: run.id})}}">Courir</a>
+				</div>
 			{# if none above then able to request to participate #}
 			{% else %}
-				<a class="request" href="{{path('app_runner_participate', {'id': run.id})}}">participer</a>
+				<a class="request" href="{{path('app_runner_participate', {'id': run.id})}}">Demander la participation</a>
 			{% endif %}
 		</div>
 		{% else %}
 			<p>Aucune course est disponible en ce moment.</p>
 		{% endfor %}
-	</div>
+	</section>
 	<div class="nav">
             <ul>
                 <li class="nav__list ">
-                    <a href="/map/" >
+                    <a href="{{path('app_map_id')}}" >
                         <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
-                        <span class="nav__list--text">Courses</span>
+                        <span class="nav__list--text">Course</span>
                     </a>
                 </li>
                 <li class="nav__list ">
@@ -54,7 +58,8 @@
             </ul>	
 	    </div>
 		<div class="logout">
-            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Me déconnecter</a>
+			<p>Vous êtes connecté en tant que {{ app.user.userIdentifier }}</p>
+            <a href="{{ path('app_logout') }}">Me déconnecter</a>
         </div>
 		{% block javascripts %}
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
