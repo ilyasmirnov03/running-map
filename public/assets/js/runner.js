@@ -68,7 +68,8 @@
 
     const WS = {
         init: async (port = 3001) => {
-            WS.server = new WebSocket(`ws://localhost:${port}`);
+            WS.addr = RunnerInterface.mode === RunnerInterface.RUN_MODE ? "runningmaps.alwaysdata.net" : "localhost";
+            WS.server = new WebSocket(`ws://${WS.addr}:${port}`);
             WS.server.addEventListener("open", WS.onOpen);
             WS.server.addEventListener("message", WS.onMessage);
         },
