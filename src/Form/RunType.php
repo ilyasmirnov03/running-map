@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Entity\Run;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class RunType extends AbstractType
 {
@@ -14,7 +14,10 @@ class RunType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('map')
+            ->add('map', FileType::class, [
+                'mapped' => false,
+                'required' => false
+            ])
             ->add('run_date')
         ;
     }

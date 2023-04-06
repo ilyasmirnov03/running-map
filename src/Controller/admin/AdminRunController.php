@@ -5,14 +5,16 @@ namespace App\Controller\admin;
 use App\Entity\Run;
 use App\Form\RunType;
 use App\Repository\RunRepository;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/admin/run')]
@@ -27,14 +29,8 @@ class AdminRunController extends AbstractController
     public function new(Request $request, RunRepository $runRepository,  SluggerInterface $slugger): Response
     {
         $run = new Run();
-        // creating custom form
-        $form = $this->createFormBuilder($run)
-            ->add('name')
-            ->add('map', FileType::class, [
-                'mapped' => false
-            ])
-            ->add('run_date')
-            ->getForm();
+
+        $form = $this->createForm(RunType::class, $run);
 
         $form->handleRequest($request);
 
@@ -77,24 +73,29 @@ class AdminRunController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_admin_run_show', methods: ['GET'])]
-    public function show(Run $run): Response
-    {
-        return $this->render('admin/run/show.html.twig', [
-            'run' => $run,
-        ]);
-    }
-
     #[Route('/{id}/edit', name: 'app_admin_run_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Run $run, RunRepository $runRepository): Response
     {
         $form = $this->createForm(RunType::class, $run);
+        //run is not finished but has begun
+        if ($run->getRunDate()->format('U') <= time() && !$run->getFinishedAt()) {
+            $form = $this->createFormBuilder($run)
+                ->add('name', TextType::class)
+                ->getForm();
+        //run is finished
+        } else if ($run->getFinishedAt()) {
+            $form = $this->createFormBuilder($run)
+                ->add('name', TextType::class, ['label' => 'Nom'])
+                ->add('finished_at', null, ['label' => 'Date de fin de course'])
+                ->getForm();
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $runRepository->save($run, true);
 
-            return $this->redirectToRoute('app_run_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_runs', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/run/edit.html.twig', [
@@ -123,6 +124,4 @@ class AdminRunController extends AbstractController
         $manager->flush();
         return $this->redirectToRoute('app_map_index', [], Response::HTTP_SEE_OTHER);
     }
-
-
 }
