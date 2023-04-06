@@ -4,6 +4,7 @@
     });
     
     const App = {
+        MODE: "PROD",
         MAX_ZOOM: 18, 
         MIN_ZOOM: 5,
         MARKER_BOX_SIZE: 38,
@@ -70,7 +71,8 @@
         init: async (port = 3001) => {
             WS.id = App.run.id;
             console.log("Connected to WS");
-            WS.server = new WebSocket(`ws://localhost:${port}`);
+            WS.addr = App.MODE === "PROD" ? "runningmaps.alwaysdata.net" : "localhost";
+            WS.server = new WebSocket(`ws://${WS.addr}:${port}`);
             WS.server.addEventListener("open", WS.onOpen);
             WS.server.addEventListener("message", WS.onMessage);
         },
