@@ -14,7 +14,7 @@
 {% block body %}
 	
 	<header>
-		<a href="{{ path('app_login') }}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img"></a>
+		<a href="{{ path('app_map_index') }}"><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="" class="header__img"></a>
 		<div class="notifications">
 			<i class="fa-solid fa-bell pr-color notifications__icon"></i>
 			<span><p>{{requests|length}}</p></span>
@@ -39,6 +39,7 @@
 		</div>
 		{% if app.user %}
         <div class="logout">
+			<a href="{{ path('app_map_index') }}" class="p-button accueil" >Retourner à la page d'accueil</a>
             Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Me déconnecter</a>
         </div>
     {% endif %}
@@ -72,7 +73,47 @@
 			{% endfor %}
 		</div>
 	</section>
-			
+	<div class="nav">
+            <ul>
+                <li class="nav__list">
+                    <a href="#">
+                        <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
+                        <span class="nav__list--text">Courses</span>
+                    </a>
+                </li>
+                <li class="nav__list">
+                    <a href="{{ path('app_map_index') }}">
+                        <span class="nav__list--icon"><i class="fa-solid fa-house"></i></span>
+                        <span class="nav__list--text">Accueil</span>
+                    </a>
+                </li>
+                <li class="nav__list active">
+                    {% if is_granted('ROLE_RUNNER') %}
+                        <a href="{{path("app_runner")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% elseif is_granted('ROLE_ADMIN') %}
+                        <a href="{{path("app_admin_index")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% else %}
+                        <a href="{{path("app_login")}}">
+                            <span class="nav__list--icon">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="nav__list--text">Profil</span>
+                        </a>
+                    {% endif %}
+                </li>
+                <div class="indicator"></div>
+            </ul>	
+	    </div>		
 			{% block javascripts %}
 			<script src="https://kit.fontawesome.com/faa5ea95e9.js" crossorigin="anonymous"></script>
 			<script src="{{ asset("assets/js/navbar.js") }}"></script>

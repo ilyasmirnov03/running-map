@@ -121,9 +121,11 @@ header {
 .logout {
   color: #3a859a;
 }
+.logout a:nth-child(2) {
+  color: #3a859a;
+}
 .logout a {
   font-weight: bold;
-  color: #3a859a;
 }
 
 .notif-bg {
@@ -136,4 +138,9 @@ header {
   display: block;
   z-index: 2;
   cursor: pointer;
+}
+
+.accueil {
+  color: white;
+  margin-bottom: 10px;
 }
