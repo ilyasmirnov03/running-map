@@ -9,7 +9,7 @@
         DEMO_MODE: 1,
         init: async () => {
 
-            RunnerInterface.mode = RunnerInterface.RUN_MODE; // ! DEFINE DEMO MODE
+            RunnerInterface.mode = RunnerInterface.DEMO_MODE; // ! DEFINE DEMO MODE
 
             if(RunDate > Math.floor(new Date().getTime() / 1000.0)) {
                 return alert("La course n'a pas commencé!");

@@ -4,7 +4,7 @@
     });
     
     const App = {
-        MODE: "PROD",
+        MODE: "PROD", // ! PROD FOR PROD
         MAX_ZOOM: 18, 
         MIN_ZOOM: 5,
         MARKER_BOX_SIZE: 38,
@@ -72,6 +72,22 @@
             WS.id = App.run.id;
             console.log("Connected to WS");
             WS.addr = App.MODE === "PROD" ? "runningmaps.alwaysdata.net" : "localhost";
+
+            // ! FIXING WS IN PROD
+            // ! BUILT INTERVAL FOR API ROUTE
+            // ! FOR DEMO ONLY
+
+            if(App.MODE === "PROD") {
+                App.initMarkers(await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0)));
+                WS.server = setInterval(async () => {
+                    const Data = await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0));
+                    Data.forEach(e => {
+                        App.MARKERS[e.runner.id].update(e.coords);
+                    });
+                }, 5000) // ? 5 SECONDES INTERVAL
+                return;
+            }
+            
             WS.server = new WebSocket(`ws://${WS.addr}:${port}`);
             WS.server.addEventListener("open", WS.onOpen);
             WS.server.addEventListener("message", WS.onMessage);
