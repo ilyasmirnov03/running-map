@@ -3,11 +3,6 @@ notifButton = document.querySelector(".notifications");
 notifPopup = document.querySelector(".gest-notif");
 bg = document.querySelector(".notif-bg");
 
-console.log(close);
-console.log(notifButton);
-console.log(notifPopup);
-console.log(bg);
-
 notifButton.addEventListener("click", OpenNotif);
 
 function OpenNotif() {

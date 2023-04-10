@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinTable;
 
 #[ORM\Entity(repositoryClass: RunRepository::class)]
 class Run
@@ -28,7 +29,7 @@ class Run
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $run_date = null;
 
-    #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'run', cascade: ["remove"])]
+    #[ORM\ManyToMany(targetEntity: Runner::class, inversedBy: 'run')]
     private Collection $runner;
 
     #[ORM\OneToMany(mappedBy: 'run', targetEntity: RunJoinRequest::class, orphanRemoval: true)]

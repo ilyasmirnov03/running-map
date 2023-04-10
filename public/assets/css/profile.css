@@ -36,22 +36,43 @@ body > a {
   font-weight: bold;
   text-decoration: none;
 }
+
+.runs__container {
+  display:flex;
+  justify-content: center;
+  gap:1rem;
+  flex-wrap: wrap;
+  margin-top:2rem;
+}
+
+.runs__buttons {
+  display:flex;
+}
+
 .runs {
-  display: flex;
-  margin-top: 10px;
-  margin-left: 10px;
+  display:flex;
+  gap:1rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+.runs p,
+.runs a {
+  color:white;
+  padding:.5rem 1rem;
+  border-radius:1rem;
 }
 
 .progress {
-  color: orange;
+  background-color: orange;
   margin-left: 10px;
 }
 .accepted {
-  color: green;
+  background-color: green;
   margin-left: 10px;
 }
 .request {
-  color: #3a859a;
+  background-color: #3a859a;
   margin-left: 10px;
 }
 .profile {
@@ -103,6 +124,7 @@ body > a {
   border-radius: 100%;
 }
 .logout {
+  margin-top:2rem;
   color: #3a859a;
   text-align: center;
 }

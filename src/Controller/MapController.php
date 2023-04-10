@@ -16,19 +16,23 @@ class MapController extends AbstractController
     public function index(RunRepository $runRepository): Response
     {
         return $this->render('map/home.html.twig', [
-            'run' =>  $runRepository->findLatest()[0],
+            //if there is no latest, return null
+            'run' =>  (isset($runRepository->findLatest()[0])) ? $runRepository->findLatest()[0] : null,
             'upcomingRuns' => $runRepository->findUpcomingRuns(),
             'pastRuns' => $runRepository->findPastRuns()
         ]);
     }
     
     #[Route('/map/{id}', name: 'app_map_id')]
-    public function run(Run $run, RunRepository $runRepository): Response
-    {
+    public function run(RunRepository $runRepository, $id = null): Response
+    {   
+        //if there is no latest run -> redirect to index
+        if (!isset($runRepository->findLatest()[0])) {
+            return $this->redirectToRoute('app_map_index');
+        }
+
         return $this->render('map/show.html.twig', [
-            'run' => $run,
-            'upcomingRuns' => $runRepository->findUpcomingRuns(),
-            'pastRuns' => $runRepository->findPastRuns()
+            'run' => ($id) ? $runRepository->find($id) : $runRepository->findLatest()[0]
         ]);
     }
 

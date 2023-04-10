@@ -1,0 +1,16 @@
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/base.css") }}">
+<link rel="stylesheet" href="{{ asset("assets/css/runnerForm.css") }}">
+{% endblock %}
+{{ form_start(form) }}
+    <img src="{{ asset("assets/images/logo-complet.png") }}" alt="" class="logo">
+    <div>
+        <h1>{{ h1_label|default('') }}</h1>
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Créer') }}</button>
+        <a href="{{ path('app_runner_profile', {id: app.user.id}) }}" class="retour">Retourner à l'accueil</a>
+    </div>
+    
+{{ form_end(form) }}
+<img src="{{ asset("assets/images/createLogin-background.png") }}" alt="" class="bg-img">

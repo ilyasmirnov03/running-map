@@ -9,7 +9,9 @@
 
 {% block body %}
 	<section class="header">
-        <a href=""><img src="{{ asset("assets/images/logo-reduit.svg") }}" alt=""></a>
+        <a href="{{path('app_map_index')}}">
+			<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="">
+		</a>
         <a href="/runner/"><div class="header__profile"><img src="{{asset("/assets/users/" ~ runner.picture)}}" alt=""></div></a>
     </section>
 	<section class="profile">
@@ -34,29 +36,28 @@
 					</div>
 						{% else %}
 						<p>Aucune course.</p>
-					
 				{% endfor %}
-				
-			
 			</div>
 	</section>
     {# <section class="profile">
         <h2>{{(connectedUser) ? 'Vos statistiques' : 'Les statistiques de ' ~ runner.login}}</h2>
     </section> #}
-	<section class="profile profile__modifier">
+	{% if connectedUser %}
+		<section class="profile profile__modifier">
 			<h2>Modifier la photo de profil</h2>
 			<div class="profile__modifier--div">
 				<span class="modifier"><img src="{{asset("/assets/users/" ~ runner.picture)}}" alt=""><p>Photo actuelle</p></span>
 				<a href="{{path('app_runner_edit', {'id': app.user.id})}}" class="modifier"><img src="{{ asset("assets/images/ajout.svg") }}" alt=""><p>Modifier la photo</p></a>
 			</div>
-			
-	</section>
+		</section>
+	{% endif %}
+	
 	 <div class="nav">
             <ul>
                 <li class="nav__list ">
-                    <a href="/map/" >
+                    <a href="{{path('app_map_id')}}" >
                         <span class="nav__list--icon"><i class="fa-solid fa-person-running"></i></span>
-                        <span class="nav__list--text">Courses</span>
+                        <span class="nav__list--text">Course</span>
                     </a>
                 </li>
                 <li class="nav__list ">

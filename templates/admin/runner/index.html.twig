@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Runner
+{% block title %}Les coureurs
 {% endblock %}
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset("assets/css/font.css") }}">
@@ -10,7 +10,9 @@
 
 {% block body %}
 	<div class="adminHeader">
-		<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="">
+		<a href="{{path('app_map_index')}}">
+			<img src="{{ asset("assets/images/logo-reduit.svg") }}" alt="logo">
+		</a>
 		<a href="{{ path('app_admin_index') }}">Accueil</a>
 	</div>
 	<h1>Gérer les profils</h1>
@@ -19,23 +21,22 @@
 		<thead>
 			<tr>
 				<th>Login</th>
-				<th>Picture</th>
-				<th></th>
+				<th>Image de profil</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for runner in runners %}
 				<tr class="runnerProfile">
 					<td>{{ runner.login }}</td>
-					<td>{{ runner.picture }}</td>
+					<td><img class="tableImage" src="{{asset('/assets/users/'~ runner.picture)}}" alt=""></td>
 					<td class="actions">
 						<a href="{{ path('app_admin_runner_edit', {'id': runner.id}) }}" class="mod-btn">Modifier</a>
-						<a href="">{{ include('admin/runner/_delete_form.html.twig') }}</a>
+						{{ include('admin/runner/_delete_form.html.twig') }}
 					</td>
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="6">no records found</td>
+					<td colspan="6">Aucun coureur a été enregistré pour l'instant.</td>
 				</tr>
 			{% endfor %}
 		</tbody>

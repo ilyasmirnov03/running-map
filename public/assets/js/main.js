@@ -82,13 +82,12 @@
                 WS.server = setInterval(async () => {
                     const Data = await Utility.fetch_run(Math.floor(new Date().getTime() / 1000.0));
                     Data.forEach(e => {
-                        console.log(e);
                         App.MARKERS[e.runner.id].update(e.coords);
                     });
                 }, 5000) // ? 5 SECONDES INTERVAL
                 return;
             }
-
+            
             WS.server = new WebSocket(`ws://${WS.addr}:${port}`);
             WS.server.addEventListener("open", WS.onOpen);
             WS.server.addEventListener("message", WS.onMessage);

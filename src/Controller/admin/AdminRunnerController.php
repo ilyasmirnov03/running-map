@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/admin/runner')]
 class AdminRunnerController extends AbstractController
@@ -27,13 +29,17 @@ class AdminRunnerController extends AbstractController
     }
 
     #[Route('/new', name: 'app_admin_runner_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, RunnerRepository $runnerRepository): Response
+    public function new(Request $request, RunnerRepository $runnerRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
         $runner = new Runner();
         $form = $this->createForm(RunnerType::class, $runner);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $runner
+                ->setPassword($passwordHasher->hashPassword($runner, $runner->getPassword()))
+                ->setRoles(['ROLE_RUNNER'])
+                ->setPicture('default.png');
             $runnerRepository->save($runner, true);
 
             return $this->redirectToRoute('app_admin_index', [], Response::HTTP_SEE_OTHER);
@@ -48,7 +54,9 @@ class AdminRunnerController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_runner_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Runner $runner, RunnerRepository $runnerRepository): Response
     {
-        $form = $this->createForm(RunnerType::class, $runner);
+        $form = $this->createFormBuilder($runner)
+            ->add('login', TextType::class)
+            ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
