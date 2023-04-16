@@ -27,7 +27,7 @@ class MapController extends AbstractController
     public function run(RunRepository $runRepository, $id = null): Response
     {   
         //if there is no latest run -> redirect to index
-        if (!isset($runRepository->findLatest()[0])) {
+        if (!isset($runRepository->findLatest()[0]) && $id == null) {
             return $this->redirectToRoute('app_map_index');
         }
 
